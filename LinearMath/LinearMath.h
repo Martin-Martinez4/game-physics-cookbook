@@ -1,0 +1,6 @@
+#ifndef LINEAR_MATH_LINEAR_MATH_H_
+#define LINEAR_MATH_LINEAR_MATH_H_
+
+
+
+#endif
