@@ -2,11 +2,16 @@
 #include <cmath>
 #include <cfloat>
 
+const float EPSILON_FLOAT = 0.0001;
 // compare floating point numbers
-#define CMP(x, y)(fabs((x)-(y)) <= FLT_EPSILON * fmax(1.0f, fmaxf(fabsf(x), fabsf(y))))
+#define CMP(x, y)(fabs((x)-(y)) <= EPSILON_FLOAT * fmax(1.0f, fmaxf(fabsf(x), fabsf(y))))
 
 vec2::vec2(): x{0.0f}, y{0.0f}{};
 vec2::vec2(float _x, float _y): x{_x}, y{_y}{};
+
+std::ostream& operator<<(std::ostream &os, const vec2& v){
+  return os << "vec2(" << v.x << ", "<< v.y << ")";
+}
 
 vec2 operator+(const vec2& l, const vec2& r){
   return { l.x + r.x, l.y + r.y };
@@ -28,8 +33,30 @@ bool operator!=(const vec2& l, const vec2& r){
   return !(l==r);
 }
 
+float Dot(const vec2& l, const vec2& r){
+  return l.x * r.x + l.y * r.y;
+}
+
+float Magnitude(const vec2& v){
+  return sqrtf(Dot(v,v));
+}
+float MagnitudeSq(const vec2& v){
+  return Dot(v, v);
+}
+
+void Normalize(vec2& v){
+  v = v * (1.0f / Magnitude(v));
+}
+vec2 Normalized(const vec2& v){
+  return  v * (1.0f / Magnitude(v));
+}
+
 vec3::vec3(): x{0.0f}, y{0.0f}, z{0.0f}{};
 vec3::vec3(float _x, float _y, float _z): x{_x}, y{_y}, z{_z}{};
+
+std::ostream& operator<<(std::ostream &os, const vec3& v){
+  return os << "vec3(" << v.x << ", "<< v.y << ", "<< v.z << ")";
+}
 
 vec3 operator+(const vec3& l, const vec3& r){
   return { l.x + r.x, l.y + r.y, l.z + r.z };
@@ -50,6 +77,29 @@ bool operator==(const vec3& l, const vec3& r){
 bool operator!=(const vec3& l, const vec3& r){
   return !(l==r);
 }
+
+float Dot(const vec3& l, const vec3& r){
+  return l.x * r.x + l.y * r.y + l.z * r.z;
+}
+
+float Magnitude(const vec3& v){
+  return sqrtf(Dot(v,v));
+}
+float MagnitudeSq(const vec3& v){
+  return Dot(v,v);
+}
+
+void Normalize(vec3& v){
+  v = v * (1.0f / Magnitude(v));
+}
+vec3 Normalized(const vec3& v){
+  return  v * (1.0f / Magnitude(v));
+}
+
+vec3 Cross(const vec3& l, const vec3& r){
+  return vec3(l.y*r.z - l.z*r.y, l.z*r.x - l.x*r.z, l.x*r.y - l.y*r.x);
+}
+
 
 
 
