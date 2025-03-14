@@ -23,9 +23,13 @@ typedef struct mat2{
   inline float* operator[](int i){
     return &(asArray[i * 2]);
   }
+  friend std::ostream& operator<<(std::ostream &os, const mat2& m);
+
 } mat2;
 
 mat2 Transpose(const mat2& matrix);
+bool operator==(const mat2& l, const mat2& r);
+bool operator!=(const mat2& l, const mat2& r);
 
 
 typedef struct mat3{
@@ -47,9 +51,13 @@ typedef struct mat3{
   inline float* operator[](int i){
     return &(asArray[i * 3]);
   }
+  friend std::ostream& operator<<(std::ostream &os, const mat3& m);
+
 } mat3;
 
 mat3 Transpose(const mat3& matrix);
+bool operator==(const mat3& l, const mat3& r);
+bool operator!=(const mat3& l, const mat3& r);
 
 typedef struct mat4{
 
@@ -71,8 +79,12 @@ typedef struct mat4{
   inline float* operator[](int i){
     return &(asArray[i * 4]);
   }
+  friend std::ostream& operator<<(std::ostream &os, const mat4& m);
+
 } mat4;
 
 mat4 Transpose(const mat4& matrix);
+bool operator==(const mat4& l, const mat4& r);
+bool operator!=(const mat4& l, const mat4& r);
 
 #endif
