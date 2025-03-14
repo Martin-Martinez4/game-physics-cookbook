@@ -4,6 +4,8 @@
 #include "Vector.h"
 
 void Transpose(const float *srcMat, float *dstMat, int srcRows, int srcCols);
+bool Multiply(float* out, const float* m1, int m1Rows, int m1Cols, const float* m2, int m2Rows, int m2Cols);
+void Cofactor(float* out, const float* minor, int rows, int cols);
 
 typedef struct mat2{
 
@@ -27,7 +29,16 @@ typedef struct mat2{
 
 } mat2;
 
-mat2 Transpose(const mat2& matrix);
+mat2 Transpose(const mat2& mat);
+mat2 Minor(const mat2& mat);
+mat2 Cofactor(const mat2& mat);
+float Determinant(const mat2& mat);
+// transpose of cofactor matrix
+mat2 Adjugate(const mat2& mat);
+mat2 Inverse(const mat2& mat);
+
+mat2 operator*(const mat2& mat, float scalar);
+mat2 operator*(const mat2& m1, const mat2& m2);
 bool operator==(const mat2& l, const mat2& r);
 bool operator!=(const mat2& l, const mat2& r);
 
@@ -55,7 +66,16 @@ typedef struct mat3{
 
 } mat3;
 
-mat3 Transpose(const mat3& matrix);
+mat3 Transpose(const mat3& mat);
+mat2 SubMatrix(const mat3& mat, int row, int col);
+mat3 Minor(const mat3& mat);
+mat3 Cofactor(const mat3& mat);
+float Determinant(const mat3& mat);
+mat3 Adjugate(const mat3& mat);
+mat3 Inverse(const mat3& mat);
+
+mat3 operator*(const mat3& matrix, float scalar);
+mat3 operator*(const mat3& m1, const mat3& m2);
 bool operator==(const mat3& l, const mat3& r);
 bool operator!=(const mat3& l, const mat3& r);
 
@@ -84,7 +104,35 @@ typedef struct mat4{
 } mat4;
 
 mat4 Transpose(const mat4& matrix);
+mat3 SubMatrix(const mat4& mat, int row, int col);
+mat4 Minor(const mat4& mat);
+mat4 Cofactor(const mat4& mat);
+float Determinant(const mat4& mat);
+mat4 Adjugate(const mat4& mat);
+mat4 Inverse(const mat4& mat);
+
+mat4 operator*(const mat4& matrix, float scalar);
+mat4 operator*(const mat4& m1, const mat4& m2);
 bool operator==(const mat4& l, const mat4& r);
 bool operator!=(const mat4& l, const mat4& r);
 
+mat4 Translation(float x, float y, float z);
+mat4 Translation(const vec3& pos);
+vec3 GetTranslation(const mat4& mat);
+
+mat4 Scale(float x, float y, float z);
+mat4 Scale(const vec3& vec);
+vec3 GetScale(const mat4& mat);
+
+mat4 XRotation(float angle);
+mat3 XRotation3x3(float angle);
+
+mat4 YRotation(float angle);
+mat3 YRotation3x3(float angle);
+
+mat4 ZRotation(float angle);
+mat3 ZRotation3x3(float angle);
+
+mat4 Rotation(float pitch, float yaw, float roll);
+mat3 Rotation3x3(float pitch, float yaw, float roll);
 #endif
