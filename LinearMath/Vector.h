@@ -6,6 +6,10 @@ const float EPSILON_FLOAT = 0.0001;
 // compare floating point numbers
 #define CMP(x, y)(fabs((x)-(y)) <= EPSILON_FLOAT * fmax(1.0f, fmaxf(fabsf(x), fabsf(y))))
 
+#define CLAMP(number, minimum, maximum) number = (number < minimum) ? minimum : ((number > maximum) ? maximum : number)
+
+#define OVERLAP(aMin, aMax, bMin, bMax) ((bMin <= aMax) && (aMin <= bMax))
+
 #define RAD2DEG(x) ((x) * 57.295754f)
 #define DEG2RAD(x) ((x) * 0.0174533f)
 
