@@ -5,6 +5,32 @@
 #include <cmath>
 #include <cfloat>
 
+std::vector<vec2> IShape::GetAxes(){
+  std::vector<vec2> axes;
+
+  for(int i = 0; i < vertices.size(); ++i){
+    vec2 p1 = vertices[i];
+    vec2 p2 = vertices[i + 1 == vertices.size() ? 0 : i +1];
+
+    vec2 edge = p1 - p2;
+
+    // switch the x and y and negate one to get the perpendicular 
+    axes.push_back(vec2{-edge.y, edge.x});
+  }
+}
+std::vector<vec2> IShape::GetVertices(){
+  return vertices;
+};
+vec2 IShape::GetCentroid(){
+  vec2 vecAcc = vec2(0,0);
+
+  for(int i = 0; i < vertices.size(); ++i){
+    vecAcc = vecAcc + vertices[i];
+  }
+
+  return vecAcc * (1/vertices.size());
+};
+
 float Length(const Line2D& line){
   return Magnitude(line.end - line.start);
 }
@@ -186,6 +212,7 @@ bool RectangleRectangle(const Rectangle2D& rectangle1, const Rectangle2D& rectan
   return overX && overY;
 }
 
+// This gets the projection of the shape onto the axis
 Interval2D GetInterval(const Rectangle2D& rectangle, const vec2& axis){
   Interval2D result;
 
@@ -210,7 +237,90 @@ Interval2D GetInterval(const Rectangle2D& rectangle, const vec2& axis){
 
   return result;
 }
+Interval2D GetInterval(const IShape& shape, const vec2& axis){
+  Interval2D result;
 
+
+  result.min = result.max = Dot(axis, shape.vertices[0]);
+
+  // handle circles
+  if(shape.vertices.size() == 1){
+    const Circle& c = static_cast <const Circle&> (shape);
+    result.min= result.min - c.radius;
+    result.max = result.max + c.radius;
+    return result;
+  }
+
+  for(int i = 1; i < shape.vertices.size(); ++i){
+    float projection = Dot(axis, shape.vertices[i]);
+    if(projection < result.min){
+      result.min = projection;
+    }
+    else if(projection > result.max){
+      result.max = projection;
+    }
+  }
+
+  return result;
+}
+
+bool OverlapOnAxis(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2, const vec2& axis){
+  Interval2D a = GetInterval(rectangle1, axis);
+  Interval2D b = GetInterval(rectangle2, axis);
+
+  return ((b.min <= a.max) && (a.min <= b.max));
+}
+
+bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2){
+  // x and y axis
+  vec2 axisToTest[] = { vec2(1,0), vec2(0,1) };
+  for(int i = 0; i < 2; ++i){
+    if(!OverlapOnAxis(rectangle1, rectangle2, axisToTest[i])){
+      return false;
+    }
+
+    // All intervals overlapped, seperating axis not found
+    return true;
+  }
+}
+
+// not tested might or might not work
+bool SATCollision(IShape& shape1, IShape& shape2){
+  std::vector<vec2> axes1 = shape1.GetAxes();
+  std::vector<vec2> axes2 = shape2.GetAxes();
+
+  if(axes1.size() == 1 || axes2.size() == 1){
+    // one is a circle
+    if(axes1.size() == 1){
+      // axes1 = circle middle - other shape middle
+    }
+    if(axes2.size() == 1){
+      // axes2 = circle middle - other shape middle
+    }
+  }
+
+  for(int i = 0; i < axes1.size(); ++i){
+    Interval2D p1 = GetInterval(shape1, axes1[i]);
+    Interval2D p2 = GetInterval(shape2, axes1[i]);
+
+    // ((b.min <= a.max) && (a.min <= b.max)) looks for overlap
+    if(!((p2.min <= p1.max) && (p1.min <= p2.max))){
+      return false;
+    }
+  }
+
+  for(int i = 0; i < axes2.size(); ++i){
+    Interval2D p1 = GetInterval(shape1, axes2[i]);
+    Interval2D p2 = GetInterval(shape2, axes2[i]);
+
+    // ((b.min <= a.max) && (a.min <= b.max)) looks for overlap
+    if(!((p2.min <= p1.max) && (p1.min <= p2.max))){
+      return false;
+    }
+  }
+
+  return true;
+}
 
 
 

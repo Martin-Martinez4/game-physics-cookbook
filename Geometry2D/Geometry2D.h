@@ -2,36 +2,63 @@
 #define GEOMETRY2D_GEMOMETRY2D_H_
 
 #include "Vector.h"
+#include <vector>
 
 typedef vec2 Point2D;
 
-typedef struct Line2D {
+struct IShape{
+public:
+  IShape(){}
+  IShape(std::vector<vec2> vertices): vertices{vertices}{}
+
+  std::vector<vec2> GetVertices();
+  vec2 GetCentroid();
+  std::vector<vec2> GetAxes();
+
+  std::vector<vec2> vertices;
+};
+
+typedef struct Line2D: public IShape {
   Point2D start;
   Point2D end;
 
   inline Line2D(){}
-  inline Line2D(const Point2D& s, const Point2D& e): start(s), end(e){}
+  inline Line2D(const Point2D& s, const Point2D& e): IShape::IShape(std::vector<vec2>{s,e}), start(s), end(e){}
 
 } Line2D;
 
 float Length(const Line2D& line);
 float LengthSq(const Line2D& line);
 
-typedef struct Circle{
+typedef struct Circle: public IShape{
   Point2D position;
   float radius;
 
-  inline Circle(): radius(1.0f){}
-  inline Circle(const Point2D& position, float radius): position(position), radius(radius){}
+  inline Circle(): IShape::IShape(std::vector<vec2>{position}), radius(1.0f){}
+  inline Circle(const Point2D& position, float radius): IShape::IShape(std::vector<vec2>{position}), position(position), radius(radius){}
 
 } Circle;
 
-typedef struct Rectangle2D{
+typedef struct Rectangle2D: public IShape{
   Point2D origin;
   vec2 size;
 
-  inline Rectangle2D(): size(1,1){}
-  inline Rectangle2D(const Point2D& origin, const vec2& size): origin(origin), size(size){}
+  inline Rectangle2D(): IShape::IShape(), size(1,1){
+    vertices = {
+      origin - (size * .5),
+      origin + (size * .5),
+      origin + vec2{-size.x * .5, size.y *.5},
+      origin + vec2{size.x * .5, -size.y *.5},
+    };
+  }
+  inline Rectangle2D(const Point2D& origin, const vec2& size): IShape::IShape(), origin(origin), size(size){
+    vertices = {
+      origin - (size * .5),
+      origin + (size * .5),
+      origin + vec2{-size.x * .5, size.y *.5},
+      origin + vec2{size.x * .5, -size.y *.5},
+    };
+  }
 } Rectangle2D;
 
 vec2 GetMin(const Rectangle2D& rect);
@@ -39,14 +66,46 @@ vec2 GetMax(const Rectangle2D& rect);
 
 Rectangle2D FromMinMax(const vec2& min, const vec2& max);
 
-typedef struct OrientedRectangle{
+typedef struct OrientedRectangle: public IShape{
   Point2D position;
   vec2 halfExtents;
   float rotation;
 
-  inline OrientedRectangle(): halfExtents(1.0f, 1.0f), rotation(0.0f){}
-  inline OrientedRectangle(const Point2D& position, const vec2& halfExtents): position(position), halfExtents(halfExtents), rotation(0.0f){}
-  inline OrientedRectangle(const Point2D& position, const vec2& halfExtent, float rotation): position(position), halfExtents(halfExtent), rotation(rotation){}
+  OrientedRectangle(): halfExtents(1.0f, 1.0f), rotation(0.0f){
+
+    vertices = {
+     (position - halfExtents),
+     (position + halfExtents),
+     position + vec2{-halfExtents.x, halfExtents.y},
+     position + vec2{halfExtents.x, -halfExtents.y},
+    };
+  }
+
+  OrientedRectangle(const Point2D& position, const vec2& halfExtents): IShape::IShape(), position(position), halfExtents(halfExtents), rotation(0.0f){
+
+    vertices = {
+     (position - halfExtents),
+     (position + halfExtents),
+     position + vec2{-halfExtents.x, halfExtents.y},
+     position + vec2{halfExtents.x, -halfExtents.y},
+    };
+  }
+
+  OrientedRectangle(const Point2D& position, const vec2& halfExtent, float rotation): IShape::IShape(), position(position), halfExtents(halfExtent), rotation(rotation){
+
+    float rads = DEG2RAD(rotation);
+    mat2 rotMat {
+      cosf(rads), -sin(rads),
+      sin(rads), cos(rads)
+    };
+
+    vertices = {
+      MultiplyVector(rotMat, (position - halfExtents)),
+      MultiplyVector(rotMat, (position + halfExtents)),
+      MultiplyVector(rotMat, position + vec2{-halfExtents.x, halfExtents.y}),
+      MultiplyVector(rotMat, position + vec2{halfExtents.x, -halfExtents.y}),
+    };
+  }
 
 } OrientedRectangle;
 
@@ -71,5 +130,11 @@ typedef struct Interval2D{
 } Interval2D;
 
 Interval2D GetInterval(const Rectangle2D& rectangle, const vec2& axis);
+Interval2D GetInterval(const IShape& shape, const vec2& axis);
+
+bool OverlapOnAxis(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2, const vec2& axis);
+bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2);
+
+bool SATCollision(IShape& shape1, IShape& shape2);
 
 #endif

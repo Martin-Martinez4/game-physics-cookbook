@@ -135,6 +135,7 @@ mat3 ZRotation3x3(float angle);
 
 mat4 Rotation(float pitch, float yaw, float roll);
 mat3 Rotation3x3(float pitch, float yaw, float roll);
+mat2 Rotation2x2(float degrees);
 
 mat4 AxisAngle(const vec3& axis, float angle);
 mat3 AxisAngle3x3(const vec3& axis, float angle);
@@ -142,6 +143,7 @@ mat3 AxisAngle3x3(const vec3& axis, float angle);
 vec3 MultiplyPoint(const vec3& vec, const mat4& mat);
 vec3 MultiplyVector(const vec3& vec, const mat4& mat);
 vec3 MultiplyVector(const vec3& vec, const mat3& mat);
+vec2 MultiplyVector(const mat2& vec, const vec2& mat);
 
 mat4 Transform(const vec3& scale, const vec3& eulerRotation, const vec3& translate);
 mat4 Transform(const vec3& scale, const vec3& rotationAxis, float rotationAngle, const vec3& translate);

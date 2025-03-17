@@ -416,6 +416,12 @@ mat4 Rotation(float pitch, float yaw, float roll){
 mat3 Rotation3x3(float pitch, float yaw, float roll){
   return ZRotation3x3(roll) * XRotation3x3(pitch) * YRotation3x3(yaw);
 }
+mat2 Rotation2x2(float degrees){
+  return mat2{
+    cosf(degrees), -sinf(degrees),
+    sin(degrees), cosf(degrees)
+  };
+}
 
 mat4 AxisAngle(const vec3& axis, float angle){
   angle = DEG2RAD(angle);
@@ -495,6 +501,13 @@ vec3 MultiplyVector(const vec3& vec, const mat3& mat){
 
   return result;
 }
+vec2 MultiplyVector(const mat2& mat, const vec2& vec){
+  return vec2{
+    mat._11*vec.x + mat._12*vec.y,
+    mat._21*vec.x + mat._22*vec.y
+  };
+}
+
 
 mat4 Transform(const vec3& scale, const vec3& eulerRotation, const vec3& translate){
   return Scale(scale) * Rotation(eulerRotation.x, eulerRotation.y, eulerRotation.z) * Translation(translate);
