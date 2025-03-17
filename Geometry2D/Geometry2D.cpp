@@ -292,10 +292,11 @@ bool SATCollision(IShape& shape1, IShape& shape2){
   if(axes1.size() == 1 || axes2.size() == 1){
     // one is a circle
     if(axes1.size() == 1){
-      // axes1 = circle middle - other shape middle
+      // There is only one axis for a circle the center point - the other center point.  
+      axes1 = {shape1.GetCentroid() - shape2.GetCentroid()};
     }
     if(axes2.size() == 1){
-      // axes2 = circle middle - other shape middle
+      axes2 = {shape2.GetCentroid() - shape1.GetCentroid()};
     }
   }
 
