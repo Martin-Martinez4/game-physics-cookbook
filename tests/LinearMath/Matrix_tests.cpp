@@ -11,7 +11,7 @@ TEST(MatrixTest, MatrixEqual){
   };
 
   std::vector<mat2Test> mat2Tests = {
-  {
+    {
       mat2{1,2,3,4},
       mat2{1,2,3,4}
     },

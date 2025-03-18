@@ -2,7 +2,7 @@
 #define LINEAR_MATH_VECTOR_H_
 #include "ostream"
 
-const float EPSILON_FLOAT = 0.0001;
+const float EPSILON_FLOAT = 0.0001f;
 // compare floating point numbers
 #define CMP(x, y)(fabs((x)-(y)) <= EPSILON_FLOAT * fmax(1.0f, fmaxf(fabsf(x), fabsf(y))))
 

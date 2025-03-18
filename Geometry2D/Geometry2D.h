@@ -1,7 +1,7 @@
 #ifndef GEOMETRY2D_GEMOMETRY2D_H_
 #define GEOMETRY2D_GEMOMETRY2D_H_
 
-#include "Vector.h"
+#include "Matrix.h"
 #include <vector>
 
 typedef vec2 Point2D;
@@ -22,7 +22,7 @@ typedef struct Line2D: public IShape {
   Point2D start;
   Point2D end;
 
-  inline Line2D(){}
+  inline Line2D(): IShape::IShape(std::vector<vec2>{vec2(0,0), vec2(0,0)}){}
   inline Line2D(const Point2D& s, const Point2D& e): IShape::IShape(std::vector<vec2>{s,e}), start(s), end(e){}
 
 } Line2D;
@@ -45,18 +45,18 @@ typedef struct Rectangle2D: public IShape{
 
   inline Rectangle2D(): IShape::IShape(), size(1,1){
     vertices = {
-      origin - (size * .5),
-      origin + (size * .5),
-      origin + vec2{-size.x * .5, size.y *.5},
-      origin + vec2{size.x * .5, -size.y *.5},
+      origin + vec2{-size.x * .5f, size.y *.5f},
+      origin + (size * .5f),
+      origin + vec2{size.x * .5f, -size.y *.5f},
+      origin - (size * .5f),
     };
   }
   inline Rectangle2D(const Point2D& origin, const vec2& size): IShape::IShape(), origin(origin), size(size){
     vertices = {
-      origin - (size * .5),
-      origin + (size * .5),
-      origin + vec2{-size.x * .5, size.y *.5},
-      origin + vec2{size.x * .5, -size.y *.5},
+        origin + vec2{-size.x * .5f, size.y *.5f},
+      origin + (size * .5f),
+      origin + vec2{size.x * .5f, -size.y *.5f},
+      origin - (size * .5f),
     };
   }
 } Rectangle2D;
@@ -131,9 +131,15 @@ typedef struct Interval2D{
 
 Interval2D GetInterval(const Rectangle2D& rectangle, const vec2& axis);
 Interval2D GetInterval(const IShape& shape, const vec2& axis);
+Interval2D GetInterval(const OrientedRectangle& rrectangle1, const vec2& axis);
 
 bool OverlapOnAxis(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2, const vec2& axis);
+bool OverlapOnAxis(const Rectangle2D& rectangle1, const OrientedRectangle& rectangle2, const vec2& axis);
+
 bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2);
+bool RectangleOrientedRectangle(const Rectangle2D& rectangle1, const OrientedRectangle& rectangle2);
+
+bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, const OrientedRectangle& rectangle2);
 
 bool SATCollision(IShape& shape1, IShape& shape2);
 

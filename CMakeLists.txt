@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(sources ${sources}
   ${CMAKE_CURRENT_SOURCE_DIR}/LinearMath/Vector.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/LinearMath/Matrix.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/Geometry2D/Geometry2D.cpp
 )
 
 add_executable(
@@ -22,6 +23,7 @@ include_directories(
   ${CMAKE_PROJECT_NAME}
   PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/LinearMath
+  ${CMAKE_CURRENT_SOURCE_DIR}/Geometry2D
 )
 
 # Tests
@@ -38,6 +40,7 @@ FetchContent_MakeAvailable(googletest)
 set(test_sources ${test_sources}
 ${CMAKE_CURRENT_SOURCE_DIR}/tests/LinearMath/Vector_tests.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/tests/LinearMath/Matrix_tests.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/tests/Geometry2D/Geometry2D_tests.cpp
 )
 
 add_executable(

@@ -17,6 +17,8 @@ std::vector<vec2> IShape::GetAxes(){
     // switch the x and y and negate one to get the perpendicular 
     axes.push_back(vec2{-edge.y, edge.x});
   }
+
+  return axes;
 }
 std::vector<vec2> IShape::GetVertices(){
   return vertices;
@@ -28,7 +30,7 @@ vec2 IShape::GetCentroid(){
     vecAcc = vecAcc + vertices[i];
   }
 
-  return vecAcc * (1/vertices.size());
+  return vecAcc * (1.f/vertices.size());
 };
 
 float Length(const Line2D& line){
@@ -264,12 +266,60 @@ Interval2D GetInterval(const IShape& shape, const vec2& axis){
   return result;
 }
 
+Interval2D GetInterval(const OrientedRectangle& rectangle, const vec2& axis){
+  Rectangle2D r = Rectangle2D{
+    Point2D(rectangle.position - rectangle.halfExtents),
+    rectangle.halfExtents * 2.0f
+  };
+
+  vec2 min = GetMin(r);
+  vec2 max = GetMax(r);
+
+  vec2 verts[] = {
+    min, max, 
+    vec2(min.x, max.y), vec2(max.x, min.y)
+  };
+
+  float t = DEG2RAD(rectangle.rotation);
+  float zRot[] = {
+    cosf(t), sinf(t),
+    -sinf(t), cosf(t)
+  };
+
+  for(int i = 0; i < 4; ++i){
+    vec2 r = verts[i] - rectangle.position;
+    Multiply(r.asArray, vec2(r.x , r.y).asArray, 1, 2, zRot, 2, 2);
+    verts[i] = r + rectangle.position;
+  }
+
+  Interval2D result;
+  result.min = result.max = Dot(axis, verts[0]);
+  for(int i = 1; i < 4; ++i){
+    float proj = Dot(axis, verts[i]);
+    if(proj < result.min){
+      result.min = proj;
+    }
+    if(proj > result.max){
+      result.max = proj;
+    }
+  }
+
+  return result;
+}
+
 bool OverlapOnAxis(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2, const vec2& axis){
   Interval2D a = GetInterval(rectangle1, axis);
   Interval2D b = GetInterval(rectangle2, axis);
 
   return ((b.min <= a.max) && (a.min <= b.max));
 }
+bool OverlapOnAxis(const Rectangle2D& rectangle1, const OrientedRectangle& rectangle2, const vec2& axis){
+  Interval2D a = GetInterval(rectangle1, axis);
+  Interval2D b = GetInterval(rectangle2, axis);
+
+  return ((b.min <= a.max) && (a.min <= b.max));
+}
+
 
 bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2){
   // x and y axis
@@ -279,10 +329,57 @@ bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rec
       return false;
     }
 
-    // All intervals overlapped, seperating axis not found
-    return true;
   }
+  // All intervals overlapped, seperating axis not found
+  return true;
 }
+bool RectangleOrientedRectangle(const Rectangle2D& rectangle1, const OrientedRectangle& rectangle2){
+  vec2 axisToTest[]{
+    vec2(1,0), vec2(0,1),
+    vec2(), vec2()
+  };
+
+  float t = DEG2RAD(rectangle2.rotation);
+  float zRot[] = {
+    cosf(t), sinf(t), 
+    -sinf(t), cosf(t)
+  };
+
+  vec2 axis = Normalized(vec2(rectangle2.halfExtents.x, 0));
+  Multiply(axisToTest[2].asArray, axis.asArray, 1, 2, zRot, 2,2);
+
+  axis = Normalized(vec2(0, rectangle2.halfExtents.y));
+  Multiply(axisToTest[3].asArray, axis.asArray, 1, 2, zRot, 2,2);
+
+  for(int i = 0; i < 4; ++i){
+    if(!OverlapOnAxis(rectangle1, rectangle2, axisToTest[i])){
+      return false;
+    }
+  }
+
+  return true;
+}
+
+bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, const OrientedRectangle& rectangle2){
+  Rectangle2D local1(Point2D(), rectangle1.halfExtents * 2.0f);
+
+  vec2 r = rectangle2.position - rectangle1.position;
+
+  OrientedRectangle local2(rectangle2.position, rectangle2.halfExtents, rectangle2.rotation);
+  local2.rotation = rectangle2.rotation - rectangle1.rotation;
+
+  float t = -DEG2RAD(rectangle1.rotation);
+  float z[] = {
+    cosf(t), sinf(t),
+    -sinf(t), cos(t)
+  };
+
+  Multiply(r.asArray, vec2(r.x, r.y).asArray, 1, 2, z, 2, 2);
+  local2.position = r + rectangle1.halfExtents;
+
+  return RectangleOrientedRectangle(local1, local2);
+}
+
 
 // not tested might or might not work
 bool SATCollision(IShape& shape1, IShape& shape2){
