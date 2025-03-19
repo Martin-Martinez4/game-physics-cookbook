@@ -239,7 +239,7 @@ TEST(Geometry2D, CircleIntersection){
     },
     {
       Circle(vec2(0,3), 2),
-      Rectangle2D(vec2(2,0.5), vec2(4, 0.5f)),
+      Rectangle2D(vec2(2,0.5), vec2(4, 0.95f)),
       false
     },
    

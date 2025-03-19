@@ -42,21 +42,7 @@ float LengthSq(const Line2D &line){
   return MagnitudeSq(line.end - line.start);
 }
 
-// If rectangle is drawn from the middle out; origin at middle to be like orientedRectangle
-vec2 GetMin(const Rectangle2D& rect){
-  vec2 p1 = rect.origin - rect.size*.5;
-  vec2 p2 = rect.origin + rect.size*.5;
-
-  return vec2(fminf(p1.x, p2.x), fminf(p1.y, p2.y));
-}
-vec2 GetMax(const Rectangle2D& rect){
-  vec2 p1 = rect.origin - rect.size * .5;
-  vec2 p2 = rect.origin + rect.size * .5;
-
-  return vec2(fmaxf(p1.x, p2.x), fmaxf(p1.y, p2.y));
-}
-
-
+// If rectangle is drawn from the middle out; origin at middle to be like
 vec2 GetMin(const Rectangle2D& rect){
   vec2 p1 = rect.origin - rect.size*.5;
   vec2 p2 = rect.origin + rect.size*.5;
