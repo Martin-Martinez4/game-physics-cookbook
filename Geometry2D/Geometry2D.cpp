@@ -4,6 +4,7 @@
 #include <climits>
 #include <cmath>
 #include <cfloat>
+#include <iostream>
 
 std::vector<vec2> IShape::GetAxes(){
   std::vector<vec2> axes;
@@ -41,15 +42,30 @@ float LengthSq(const Line2D &line){
   return MagnitudeSq(line.end - line.start);
 }
 
+// If rectangle is drawn from the middle out; origin at middle to be like orientedRectangle
 vec2 GetMin(const Rectangle2D& rect){
-  vec2 p1 = rect.origin;
-  vec2 p2 = rect.origin + rect.size;
+  vec2 p1 = rect.origin - rect.size*.5;
+  vec2 p2 = rect.origin + rect.size*.5;
 
   return vec2(fminf(p1.x, p2.x), fminf(p1.y, p2.y));
 }
 vec2 GetMax(const Rectangle2D& rect){
-  vec2 p1 = rect.origin;
-  vec2 p2 = rect.origin + rect.size;
+  vec2 p1 = rect.origin - rect.size * .5;
+  vec2 p2 = rect.origin + rect.size * .5;
+
+  return vec2(fmaxf(p1.x, p2.x), fmaxf(p1.y, p2.y));
+}
+
+
+vec2 GetMin(const Rectangle2D& rect){
+  vec2 p1 = rect.origin - rect.size*.5;
+  vec2 p2 = rect.origin + rect.size*.5;
+
+  return vec2(fminf(p1.x, p2.x), fminf(p1.y, p2.y));
+}
+vec2 GetMax(const Rectangle2D& rect){
+  vec2 p1 = rect.origin - rect.size * .5;
+  vec2 p2 = rect.origin + rect.size * .5;
 
   return vec2(fmaxf(p1.x, p2.x), fmaxf(p1.y, p2.y));
 }
@@ -166,7 +182,7 @@ bool LineOrientedRectangle(const Line2D& line, const OrientedRectangle& rectangl
 }
 
 bool CircleCircle(const Circle& circle1, const Circle& circle2){
-  float radiiSum = circle1.radius * circle2.radius;
+  float radiiSum = circle1.radius + circle2.radius;
 
   return LengthSq(Line2D(circle1.position, circle2.position)) <= radiiSum*radiiSum;
 }

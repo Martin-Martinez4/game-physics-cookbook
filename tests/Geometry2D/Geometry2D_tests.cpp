@@ -129,13 +129,13 @@ TEST(Geometry2D, Geometry2DVertices){
       vec2(0,0),
       vec2(1,2),
       45,
-      std::vector<vec2> {vec2(-2.12132,0.707106), vec2(-0.707107,2.12132), vec2(2.12132,-0.707107), vec2(.707107,-2.12132),}
+      std::vector<vec2> {vec2(-2.12132f,0.707106f), vec2(-0.707107f,2.12132f), vec2(2.12132f,-0.707107f), vec2(.707107f,-2.12132f),}
     },
     {
       vec2(0,0),
       vec2(1,2),
       -45,
-      std::vector<vec2> {vec2(.707107,2.12132), vec2(2.12132,0.707107), vec2(-0.707107,-2.12132), vec2(-2.12132,-0.707106)}
+      std::vector<vec2> {vec2(.707107f,2.12132f), vec2(2.12132f,0.707107f), vec2(-0.707107f,-2.12132f), vec2(-2.12132f,-0.707106f)}
     },
   };
 
@@ -189,11 +189,26 @@ TEST(Geometry2D, CircleIntersection){
     {
       Circle(vec2(), 2),
       Circle(vec2(2,2), 1),
-      false
+      true
     },
     {
       Circle(vec2(), 2),
       Circle(vec2(1,1.5), 1),
+      true
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(2,3), 1),
+      false
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(3,1), 1),
+      false
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(3,1), 1.5),
       true
     },
 
@@ -203,6 +218,37 @@ TEST(Geometry2D, CircleIntersection){
     circleCircleTest t = circleCircleTests[i];
     
     EXPECT_EQ(CircleCircle(t.c1, t.c2), t.want);
+  }
+
+   struct circleRectangleTest{
+    Circle c1;
+    Rectangle2D r1;
+    bool want;
+  };
+
+  std::vector<circleRectangleTest> circleRectangleTests = {
+    {
+      Circle(vec2(), 1),
+      Rectangle2D(vec2(1,1), vec2(1,1)),
+      true
+    },
+    {
+      Circle(vec2(0,3), 2),
+      Rectangle2D(vec2(2,0.5), vec2(4,1)),
+      true
+    },
+    {
+      Circle(vec2(0,3), 2),
+      Rectangle2D(vec2(2,0.5), vec2(4, 0.5f)),
+      false
+    },
+   
+  };
+
+  for(int i = 0; i < circleRectangleTests.size(); ++i){
+    circleRectangleTest t = circleRectangleTests[i];
+    
+    EXPECT_EQ(CircleRectangle(t.c1, t.r1), t.want);
   }
 }
 
