@@ -187,7 +187,7 @@ bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle){
 }
 
 bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rectangle){
-  vec2 r = circle.position - rectangle.position;
+  vec2 r = circle.position - (rectangle.position + rectangle.halfExtents);
 
   float theta = -DEG2RAD(rectangle.rotation);
   float zRotation2x2[] = {
@@ -322,19 +322,18 @@ bool OverlapOnAxis(const Rectangle2D& rectangle1, const OrientedRectangle& recta
   return ((b.min <= a.max) && (a.min <= b.max));
 }
 
+// bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2){
+//   // x and y axis
+//   vec2 axisToTest[] = { vec2(1,0), vec2(0,1) };
+//   for(int i = 0; i < 2; ++i){
+//     if(!OverlapOnAxis(rectangle1, rectangle2, axisToTest[i])){
+//       return false;
+//     }
 
-bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2){
-  // x and y axis
-  vec2 axisToTest[] = { vec2(1,0), vec2(0,1) };
-  for(int i = 0; i < 2; ++i){
-    if(!OverlapOnAxis(rectangle1, rectangle2, axisToTest[i])){
-      return false;
-    }
-
-  }
-  // All intervals overlapped, seperating axis not found
-  return true;
-}
+//   }
+//   // All intervals overlapped, seperating axis not found
+//   return true;
+// }
 bool RectangleOrientedRectangle(const Rectangle2D& rectangle1, const OrientedRectangle& rectangle2){
   vec2 axisToTest[]{
     vec2(1,0), vec2(0,1),
