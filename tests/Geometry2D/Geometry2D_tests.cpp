@@ -87,12 +87,61 @@ TEST(Geometry2D, Geometry2DVertices){
       vec2(2,4),
       std::vector<vec2> {vec2(-1,2), vec2(1,2), vec2(1,-2), vec2(-1,-2),}
     },
-   
+    {
+      vec2(2,1),
+      vec2(4,2),
+      std::vector<vec2> {vec2(0,2), vec2(4,2), vec2(4,0), vec2(0,0),}
+    },
+    {
+      vec2(-3.5,-3.5),
+      vec2(7,7),
+      std::vector<vec2> {vec2(-7,0), vec2(0,0), vec2(0,-7), vec2(-7,-7),}
+    },
   };
 
   for(int i = 0; i < rectangleVertTests.size(); ++i){
     rectangleVertTest t = rectangleVertTests[i];
     Rectangle2D r(t.position, t.size);
+
+    EXPECT_EQ(r.vertices.size(), t.want.size());
+
+    for(int j = 0; j < t.want.size(); ++j){
+      EXPECT_EQ(r.vertices[j], t.want[j]);
+    }
+  }
+
+  /* --Oriented Rectangle-- */
+  struct orientedRectangleVertTest{
+    vec2 position;
+    vec2 halfExtents;
+    float rotation;
+    std::vector<vec2> want;
+  };
+
+   std::vector<orientedRectangleVertTest> orientedRectangleVertTests = {
+    {
+      vec2(0,0),
+      vec2(1,2),
+      90,
+      std::vector<vec2> {vec2(-2,-1), vec2(-2,1), vec2(2,1), vec2(2, -1),}
+    },
+    {
+      vec2(0,0),
+      vec2(1,2),
+      45,
+      std::vector<vec2> {vec2(-2.12132,0.707106), vec2(-0.707107,2.12132), vec2(2.12132,-0.707107), vec2(.707107,-2.12132),}
+    },
+    {
+      vec2(0,0),
+      vec2(1,2),
+      -45,
+      std::vector<vec2> {vec2(.707107,2.12132), vec2(2.12132,0.707107), vec2(-0.707107,-2.12132), vec2(-2.12132,-0.707106)}
+    },
+  };
+
+  for(int i = 0; i < orientedRectangleVertTests.size(); ++i){
+    orientedRectangleVertTest t = orientedRectangleVertTests[i];
+    OrientedRectangle r(t.position, t.halfExtents, t.rotation);
 
     EXPECT_EQ(r.vertices.size(), t.want.size());
 
@@ -124,6 +173,13 @@ Test Circle Intersection
   - CircleRectangle
   - CircleOrientedRectangle
 */
+TEST(Geometry2D, CircleIntersection){
+  struct circleCircleTest{
+    Circle c1;
+    Circle c2;
+    bool want;
+  };
+}
 
 /*
 Test Rectangle Intersection

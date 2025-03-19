@@ -2,6 +2,7 @@
 #define GEOMETRY2D_GEMOMETRY2D_H_
 
 #include "Matrix.h"
+#include <cmath>
 #include <vector>
 
 typedef vec2 Point2D;
@@ -74,20 +75,20 @@ typedef struct OrientedRectangle: public IShape{
   OrientedRectangle(): halfExtents(1.0f, 1.0f), rotation(0.0f){
 
     vertices = {
-     (position - halfExtents),
-     (position + halfExtents),
-     position + vec2{-halfExtents.x, halfExtents.y},
-     position + vec2{halfExtents.x, -halfExtents.y},
+      position + vec2{-halfExtents.x, halfExtents.y},
+      (position + halfExtents),
+      position + vec2{halfExtents.x, -halfExtents.y},
+      (position - halfExtents),
     };
   }
 
   OrientedRectangle(const Point2D& position, const vec2& halfExtents): IShape::IShape(), position(position), halfExtents(halfExtents), rotation(0.0f){
 
     vertices = {
-     (position - halfExtents),
-     (position + halfExtents),
-     position + vec2{-halfExtents.x, halfExtents.y},
-     position + vec2{halfExtents.x, -halfExtents.y},
+      position + vec2{-halfExtents.x, halfExtents.y},
+      (position + halfExtents),
+      position + vec2{halfExtents.x, -halfExtents.y},
+      (position - halfExtents),
     };
   }
 
@@ -95,15 +96,15 @@ typedef struct OrientedRectangle: public IShape{
 
     float rads = DEG2RAD(rotation);
     mat2 rotMat {
-      cosf(rads), -sin(rads),
-      sin(rads), cos(rads)
+      cosf(rads), -sinf(rads),
+      sinf(rads), cosf(rads)
     };
 
     vertices = {
-      MultiplyVector(rotMat, (position - halfExtents)),
-      MultiplyVector(rotMat, (position + halfExtents)),
       MultiplyVector(rotMat, position + vec2{-halfExtents.x, halfExtents.y}),
+      MultiplyVector(rotMat, (position + halfExtents)),
       MultiplyVector(rotMat, position + vec2{halfExtents.x, -halfExtents.y}),
+      MultiplyVector(rotMat, (position - halfExtents)),
     };
   }
 

@@ -35,3 +35,5 @@ build/
 .clangd
 CMakeFiles/
 _deps/
+.cache
+.vscode

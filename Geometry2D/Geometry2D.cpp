@@ -371,7 +371,7 @@ bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, con
   float t = -DEG2RAD(rectangle1.rotation);
   float z[] = {
     cosf(t), sinf(t),
-    -sinf(t), cos(t)
+    -sinf(t), cosf(t)
   };
 
   Multiply(r.asArray, vec2(r.x, r.y).asArray, 1, 2, z, 2, 2);
