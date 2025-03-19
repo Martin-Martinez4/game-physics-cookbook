@@ -179,6 +179,31 @@ TEST(Geometry2D, CircleIntersection){
     Circle c2;
     bool want;
   };
+
+  std::vector<circleCircleTest> circleCircleTests = {
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(1,1), 1),
+      true
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(2,2), 1),
+      false
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(1,1.5), 1),
+      true
+    },
+
+  };
+
+  for(int i = 0; i < circleCircleTests.size(); ++i){
+    circleCircleTest t = circleCircleTests[i];
+    
+    EXPECT_EQ(CircleCircle(t.c1, t.c2), t.want);
+  }
 }
 
 /*

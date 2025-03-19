@@ -35,7 +35,7 @@ typedef struct Circle: public IShape{
   Point2D position;
   float radius;
 
-  inline Circle(): IShape::IShape(std::vector<vec2>{position}), radius(1.0f){}
+  inline Circle(): IShape::IShape(std::vector<vec2>{vec2(0,0)}), radius(1.0f){}
   inline Circle(const Point2D& position, float radius): IShape::IShape(std::vector<vec2>{position}), position(position), radius(radius){}
 
 } Circle;
