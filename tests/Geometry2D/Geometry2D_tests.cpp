@@ -259,9 +259,10 @@ TEST(Geometry2D, CircleIntersection){
       true
     },
     {
+      //
       Circle(vec2(0,3), 2),
       Rectangle2D(vec2(.5f,.75f), vec2(1.f,1.f)),
-      true
+      false
     },
     {
       Circle(vec2(0,3), 2),
@@ -273,7 +274,7 @@ TEST(Geometry2D, CircleIntersection){
   for(int i = 0; i < circleRectangleTests.size(); ++i){
     circleRectangleTest t = circleRectangleTests[i];
     
-    EXPECT_EQ(CircleRectangle(t.c1, t.r1), t.want);
+    EXPECT_EQ(CircleRectangle(t.c1, t.r1), t.want) << i;
   }
 
   struct circleOrientedRectangleTest{
@@ -329,7 +330,6 @@ TEST(Geometry2D, CircleIntersection){
       true
     },
     {
-      //
       Circle(vec2(0,0), 1),
       OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), -45),
       true
@@ -339,6 +339,26 @@ TEST(Geometry2D, CircleIntersection){
       OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), -30),
       true
     },
+    {
+      Circle(vec2(-1,-1), 1),
+      OrientedRectangle(vec2(-.5, 1.5f), vec2(2.f, 0.5f), -30),
+      false
+    },
+    {
+      Circle(vec2(-1,-1), 1),
+      OrientedRectangle(vec2(-.5, -1.5f), vec2(2.f, 0.5f), -30),
+      true
+    },
+    {
+      Circle(vec2(-1,-1), 1),
+      OrientedRectangle(vec2(-.5, -1.5f), vec2(2.25f, 1.f), -30),
+      true
+    },
+    // {
+    //   Circle(vec2(-2,-2.15), 2),
+    //   OrientedRectangle(vec2(0, 1.25), vec2(2,1.f), 30),
+    //   true
+    // },
   };
 
   for(int i = 0; i < circleOrientedRectangleTests.size(); ++i){

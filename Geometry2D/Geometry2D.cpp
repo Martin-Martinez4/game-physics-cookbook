@@ -177,17 +177,47 @@ bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle){
   vec2 min = GetMin(rectangle);
   vec2 max = GetMax(rectangle);
 
+  
   Point2D closestPoint = circle.position;
 
-  CLAMP(closestPoint.x, min.x, max.x);
-  CLAMP(closestPoint.y, min.y, max.y);
+  // CLAMP(closestPoint.x, min.x, max.x);
+  // CLAMP(closestPoint.y, min.y, max.y);
+
+  if(closestPoint.x < min.x){
+    closestPoint.x = min.x;
+  }else if(closestPoint.x > max.x){
+    closestPoint.x = max.x;
+  }
+
+  if(closestPoint.y < min.y){
+    closestPoint.y = min.y;
+  }else if(closestPoint.y > max.y){
+    closestPoint.y = max.y;
+  }
+
+std::cout << "==============\n";
+  std::cout << "min: " << min << "\n";
+  std::cout << "max: " << max << "\n";
+  std::cout << "closest point: " << closestPoint << "\n";
 
   Line2D line(circle.position, closestPoint);
-  return LengthSq(line) <= circle.radius*circle.radius;
+  std::cout << "line.end: " <<  line.end << "\n";
+  std::cout << "line.start: " <<  line.start << "\n";
+  std::cout << "LengthSq: " <<  LengthSq(line) << "\n";
+  std::cout << "circle.radius: " <<  circle.radius << "\n";
+  std::cout << "circle.position: " <<  circle.position << "\n";
+
+   std::cout << "verts: " << "\n";
+  std::cout << rectangle.vertices[0] << "\n";
+  std::cout << rectangle.vertices[1] << "\n";
+  std::cout << rectangle.vertices[2] << "\n";
+  std::cout << rectangle.vertices[3] << "\n";
+std::cout << "==============\n";
+  return LengthSq(line) <= (circle.radius*circle.radius);
 }
 
 bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rectangle){
-  vec2 r = circle.position -( rectangle.position +rectangle.halfExtents);
+  vec2 r = circle.position - (rectangle.position + rectangle.halfExtents);
 
   float theta = -DEG2RAD(rectangle.rotation);
   float zRotation2x2[] = {
@@ -202,17 +232,18 @@ bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rect
 
   // r = {unrotX, unrotY};
 
-  Circle localCircle(r + rectangle.halfExtents, circle.radius);
+  Circle localCircle(r+rectangle.halfExtents, circle.radius);
   Rectangle2D localRect(Point2D(), rectangle.halfExtents*2.0f);
 
   // std::cout << "=========================\n";
-  // std::cout << "r: " << r + rectangle.halfExtents << "\n";
+  // std::cout << "local circle center: " << localCircle.position << "\n";
 
   // std::cout << "verts: " << "\n";
   // std::cout << rectangle.vertices[0] << "\n";
   // std::cout << rectangle.vertices[1] << "\n";
   // std::cout << rectangle.vertices[2] << "\n";
   // std::cout << rectangle.vertices[3] << "\n";
+
   // std::cout << "\n";
   // std::cout << "local verts: " << "\n";
   // std::cout << localRect.vertices[0] << "\n";
@@ -427,7 +458,7 @@ bool SATCollision(IShape& shape1, IShape& shape2){
     Interval2D p1 = GetInterval(shape1, axes1[i]);
     Interval2D p2 = GetInterval(shape2, axes1[i]);
 
-    // ((b.min <= a.max) && (a.min <= b.max)) looks for overlap
+    // ((p2.min <= p1.max) && (p1.min <= p2.max)) looks for overlap
     if(!((p2.min <= p1.max) && (p1.min <= p2.max))){
       return false;
     }
@@ -437,7 +468,7 @@ bool SATCollision(IShape& shape1, IShape& shape2){
     Interval2D p1 = GetInterval(shape1, axes2[i]);
     Interval2D p2 = GetInterval(shape2, axes2[i]);
 
-    // ((b.min <= a.max) && (a.min <= b.max)) looks for overlap
+    // ((p2.min <= p1.max) && (p1.min <= p2.max)) looks for overlap
     if(!((p2.min <= p1.max) && (p1.min <= p2.max))){
       return false;
     }
