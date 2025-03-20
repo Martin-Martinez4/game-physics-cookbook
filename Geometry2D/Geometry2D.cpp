@@ -187,20 +187,45 @@ bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle){
 }
 
 bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rectangle){
-  vec2 r = circle.position - (rectangle.position + rectangle.halfExtents);
+  vec2 r = circle.position -( rectangle.position +rectangle.halfExtents);
 
   float theta = -DEG2RAD(rectangle.rotation);
   float zRotation2x2[] = {
-    cosf(theta), sinf(theta),
-    -sinf(theta), cosf(theta)
+    cosf(theta), -sinf(theta),
+    sinf(theta), cosf(theta)
   };
 
-  Multiply(r.asArray, vec2(r.x, r.y).asArray, 1, 2, zRotation2x2, 2, 2);
+  Multiply(r.asArray, zRotation2x2, 2, 2, vec2(r.x, r.y).asArray, 1, 2);
+
+  // float unrotX = cosf(theta) * r.x - sinf(theta) * r.y;
+  // float unrotY = cosf(theta) * r.x + sinf(theta) * r.y;
+
+  // r = {unrotX, unrotY};
 
   Circle localCircle(r + rectangle.halfExtents, circle.radius);
   Rectangle2D localRect(Point2D(), rectangle.halfExtents*2.0f);
 
+  // std::cout << "=========================\n";
+  // std::cout << "r: " << r + rectangle.halfExtents << "\n";
+
+  // std::cout << "verts: " << "\n";
+  // std::cout << rectangle.vertices[0] << "\n";
+  // std::cout << rectangle.vertices[1] << "\n";
+  // std::cout << rectangle.vertices[2] << "\n";
+  // std::cout << rectangle.vertices[3] << "\n";
+  // std::cout << "\n";
+  // std::cout << "local verts: " << "\n";
+  // std::cout << localRect.vertices[0] << "\n";
+  // std::cout << localRect.vertices[1] << "\n";
+  // std::cout << localRect.vertices[2] << "\n";
+  // std::cout << localRect.vertices[3] << "\n";
+  // std::cout << "\n";
+
+  // std::cout << "=========================\n";
+
+
   return CircleRectangle(localCircle, localRect);
+
 }
 
 bool RectangleRectangle(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2){

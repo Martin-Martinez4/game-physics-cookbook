@@ -284,7 +284,7 @@ TEST(Geometry2D, CircleIntersection){
 
   std::vector<circleOrientedRectangleTest> circleOrientedRectangleTests = {
     {
-      Circle(vec2(), 1),
+      Circle(vec2(0,0), 1),
       OrientedRectangle(vec2(1,1), vec2(.5,.5), 0),
       true
     },
@@ -300,13 +300,18 @@ TEST(Geometry2D, CircleIntersection){
     },
     {
       Circle(vec2(0,3), 2),
-      OrientedRectangle(vec2(.5f,.75f), vec2(0.5f,0.25f), 0),
-      true
+      OrientedRectangle(vec2(.5f,.5f), vec2(0.5f,0.25f), 0),
+      false
     },
     {
       Circle(vec2(0,3), 2),
-      OrientedRectangle(vec2(.5f,.74f), vec2(0.5f,0.25f), 0),
+      OrientedRectangle(vec2(.5f,.70f), vec2(0.5f,0.25f), 0),
       false
+    },
+    {
+      Circle(vec2(0,3), 2),
+      OrientedRectangle(vec2(.5f,.75f), vec2(.5f,.5f), 0),
+      true
     },
     {
       Circle(vec2(0,0), 1),
@@ -316,7 +321,7 @@ TEST(Geometry2D, CircleIntersection){
     {
       Circle(vec2(0,0), 1),
       OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), 90),
-      false
+      true
     },
     {
       Circle(vec2(0,0), 1),
@@ -324,14 +329,15 @@ TEST(Geometry2D, CircleIntersection){
       true
     },
     {
+      //
       Circle(vec2(0,0), 1),
       OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), -45),
-      false
+      true
     },
     {
       Circle(vec2(0,0), 1),
       OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), -30),
-      false
+      true
     },
   };
 
