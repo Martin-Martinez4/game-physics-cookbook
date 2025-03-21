@@ -259,16 +259,21 @@ TEST(Geometry2D, CircleIntersection){
       true
     },
     {
-      //
       Circle(vec2(0,3), 2),
       Rectangle2D(vec2(.5f,.75f), vec2(1.f,1.f)),
-      false
+      true
     },
     {
       Circle(vec2(0,3), 2),
       Rectangle2D(vec2(.5f,.75f), vec2(1.f,0.5f)),
       true
     },
+    {
+      Circle(vec2(-2,-2.15), 2),
+      Rectangle2D(vec2(0, 1.25f), vec2(2.f,1.f)),
+      false
+    },
+    
   };
 
   for(int i = 0; i < circleRectangleTests.size(); ++i){
@@ -354,11 +359,11 @@ TEST(Geometry2D, CircleIntersection){
       OrientedRectangle(vec2(-.5, -1.5f), vec2(2.25f, 1.f), -30),
       true
     },
-    // {
-    //   Circle(vec2(-2,-2.15), 2),
-    //   OrientedRectangle(vec2(0, 1.25), vec2(2,1.f), 30),
-    //   true
-    // },
+    {
+      Circle(vec2(-2,-2.15), 2),
+      OrientedRectangle(vec2(0, 1.25f), vec2(2.f,1.f), 0),
+      false
+    },
   };
 
   for(int i = 0; i < circleOrientedRectangleTests.size(); ++i){

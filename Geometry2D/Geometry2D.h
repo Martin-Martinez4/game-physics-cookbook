@@ -45,19 +45,19 @@ typedef struct Rectangle2D: public IShape{
   vec2 size;
 
   inline Rectangle2D(): IShape::IShape(), size(1,1){
-    vertices = {
-      origin + vec2{-size.x * .5f, size.y *.5f},
-      origin + (size * .5f),
-      origin + vec2{size.x * .5f, -size.y *.5f},
-      origin - (size * .5f),
+     vertices = {
+      origin,
+      origin + vec2{0, size.y},
+      origin + size,
+      origin + vec2(size.x, 0),
     };
   }
   inline Rectangle2D(const Point2D& origin, const vec2& size): IShape::IShape(), origin(origin), size(size){
     vertices = {
-        origin + vec2{-size.x * .5f, size.y *.5f},
-      origin + (size * .5f),
-      origin + vec2{size.x * .5f, -size.y *.5f},
-      origin - (size * .5f),
+      origin,
+      origin + vec2{0, size.y},
+      origin + size,
+      origin + vec2(size.x, 0),
     };
   }
 } Rectangle2D;
@@ -96,15 +96,28 @@ typedef struct OrientedRectangle: public IShape{
 
     float rads = DEG2RAD(rotation);
     mat2 rotMat {
-      cosf(rads), -sinf(rads),
-      sinf(rads), cosf(rads)
+      cosf(rads), sinf(rads),
+      -sinf(rads), cosf(rads)
     };
 
+    vec2 v1;
+    Multiply(v1.asArray,rotMat.asArray, 2, 2, ( position + vec2{-halfExtents.x, halfExtents.y}).asArray, 2,1);
+    vec2 v2;
+    Multiply(v2.asArray, rotMat.asArray, 2, 2, (position + halfExtents).asArray, 2,1);
+    vec2 v3;
+    Multiply(v3.asArray,rotMat.asArray, 2, 2,( position + vec2{halfExtents.x, -halfExtents.y}).asArray, 2,1);
+    vec2 v4;
+    Multiply(v4.asArray, rotMat.asArray, 2, 2, (position - halfExtents).asArray, 2,1);
+
     vertices = {
-      MultiplyVector(rotMat, position + vec2{-halfExtents.x, halfExtents.y}),
-      MultiplyVector(rotMat, (position + halfExtents)),
-      MultiplyVector(rotMat, position + vec2{halfExtents.x, -halfExtents.y}),
-      MultiplyVector(rotMat, (position - halfExtents)),
+      // MultiplyVector(rotMat,( position + vec2{-halfExtents.x, halfExtents.y})),
+      v1,
+      v2,
+      v3,
+      v4
+      // MultiplyVector(rotMat, (position + halfExtents)),
+      // MultiplyVector(rotMat,( position + vec2{halfExtents.x, -halfExtents.y})),
+      // MultiplyVector(rotMat, (position - halfExtents)),
     };
   }
 

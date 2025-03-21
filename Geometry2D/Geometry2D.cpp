@@ -44,14 +44,14 @@ float LengthSq(const Line2D &line){
 
 // If rectangle is drawn from the middle out; origin at middle to be like
 vec2 GetMin(const Rectangle2D& rect){
-  vec2 p1 = rect.origin - rect.size*.5;
-  vec2 p2 = rect.origin + rect.size*.5;
+  vec2 p1 = rect.origin;
+  vec2 p2 = rect.origin + rect.size;
 
   return vec2(fminf(p1.x, p2.x), fminf(p1.y, p2.y));
 }
 vec2 GetMax(const Rectangle2D& rect){
-  vec2 p1 = rect.origin - rect.size * .5;
-  vec2 p2 = rect.origin + rect.size * .5;
+  vec2 p1 = rect.origin;
+  vec2 p2 = rect.origin + rect.size;
 
   return vec2(fmaxf(p1.x, p2.x), fmaxf(p1.y, p2.y));
 }
@@ -194,65 +194,68 @@ bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle){
   }else if(closestPoint.y > max.y){
     closestPoint.y = max.y;
   }
-
-std::cout << "==============\n";
-  std::cout << "min: " << min << "\n";
-  std::cout << "max: " << max << "\n";
-  std::cout << "closest point: " << closestPoint << "\n";
-
   Line2D line(circle.position, closestPoint);
-  std::cout << "line.end: " <<  line.end << "\n";
-  std::cout << "line.start: " <<  line.start << "\n";
-  std::cout << "LengthSq: " <<  LengthSq(line) << "\n";
-  std::cout << "circle.radius: " <<  circle.radius << "\n";
-  std::cout << "circle.position: " <<  circle.position << "\n";
 
-   std::cout << "verts: " << "\n";
-  std::cout << rectangle.vertices[0] << "\n";
-  std::cout << rectangle.vertices[1] << "\n";
-  std::cout << rectangle.vertices[2] << "\n";
-  std::cout << rectangle.vertices[3] << "\n";
-std::cout << "==============\n";
+// std::cout << "==============\n";
+//   std::cout << "min: " << min << "\n";
+//   std::cout << "max: " << max << "\n";
+//   std::cout << "closest point: " << closestPoint << "\n";
+
+//   std::cout << "line.end: " <<  line.end << "\n";
+//   std::cout << "line.start: " <<  line.start << "\n";
+//   std::cout << "LengthSq: " <<  LengthSq(line) << "\n";
+//   std::cout << "circle.radius: " <<  circle.radius << "\n";
+//   std::cout << "circle.position: " <<  circle.position << "\n";
+
+//    std::cout << "verts: " << "\n";
+//   std::cout << rectangle.vertices[0] << "\n";
+//   std::cout << rectangle.vertices[1] << "\n";
+//   std::cout << rectangle.vertices[2] << "\n";
+//   std::cout << rectangle.vertices[3] << "\n";
+// std::cout << "==============\n";
   return LengthSq(line) <= (circle.radius*circle.radius);
 }
 
 bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rectangle){
-  vec2 r = circle.position - (rectangle.position + rectangle.halfExtents);
+ vec2 r = circle.position - rectangle.position;
+ float theta = -DEG2RAD(rectangle.rotation);
 
-  float theta = -DEG2RAD(rectangle.rotation);
-  float zRotation2x2[] = {
-    cosf(theta), -sinf(theta),
-    sinf(theta), cosf(theta)
-  };
+ float zRotation2x2[] = {
+  cosf(theta), -sinf(theta),
+  sinf(theta), cosf(theta)
+ };
 
-  Multiply(r.asArray, zRotation2x2, 2, 2, vec2(r.x, r.y).asArray, 1, 2);
+ Multiply(r.asArray, vec2(r.x, r.y).asArray, 1, 2, zRotation2x2, 2, 2);
 
-  // float unrotX = cosf(theta) * r.x - sinf(theta) * r.y;
-  // float unrotY = cosf(theta) * r.x + sinf(theta) * r.y;
+  // float rotatedX = (cosf(theta) * (circle.position.x - rectangle.position.x)) + (sinf(theta) * (circle.position.y - rectangle.position.y));
+  // float rotatedY = (cosf(theta) * (circle.position.y - rectangle.position.y)) - (sinf(theta) * (circle.position.x - rectangle.position.x));
 
-  // r = {unrotX, unrotY};
+  // vec2 r{rotatedX, rotatedY};
 
   Circle localCircle(r+rectangle.halfExtents, circle.radius);
   Rectangle2D localRect(Point2D(), rectangle.halfExtents*2.0f);
 
-  // std::cout << "=========================\n";
-  // std::cout << "local circle center: " << localCircle.position << "\n";
+  std::cout << "=========================\n";
 
-  // std::cout << "verts: " << "\n";
-  // std::cout << rectangle.vertices[0] << "\n";
-  // std::cout << rectangle.vertices[1] << "\n";
-  // std::cout << rectangle.vertices[2] << "\n";
-  // std::cout << rectangle.vertices[3] << "\n";
+  std::cout << "r: " << r << "\n";
 
-  // std::cout << "\n";
-  // std::cout << "local verts: " << "\n";
-  // std::cout << localRect.vertices[0] << "\n";
-  // std::cout << localRect.vertices[1] << "\n";
-  // std::cout << localRect.vertices[2] << "\n";
-  // std::cout << localRect.vertices[3] << "\n";
-  // std::cout << "\n";
+  std::cout << "verts: " << "\n";
+  std::cout << rectangle.vertices[0] << "\n";
+  std::cout << rectangle.vertices[1] << "\n";
+  std::cout << rectangle.vertices[2] << "\n";
+  std::cout << rectangle.vertices[3] << "\n";
 
-  // std::cout << "=========================\n";
+  std::cout << "\nlocal circle center: " << localCircle.position << "\n";
+  
+  std::cout << "\n";
+  std::cout << "local verts: " << "\n";
+  std::cout << localRect.vertices[0] << "\n";
+  std::cout << localRect.vertices[1] << "\n";
+  std::cout << localRect.vertices[2] << "\n";
+  std::cout << localRect.vertices[3] << "\n";
+  std::cout << "\n";
+
+  std::cout << "=========================\n";
 
 
   return CircleRectangle(localCircle, localRect);
