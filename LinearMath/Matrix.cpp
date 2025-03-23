@@ -416,10 +416,11 @@ mat4 Rotation(float pitch, float yaw, float roll){
 mat3 Rotation3x3(float pitch, float yaw, float roll){
   return ZRotation3x3(roll) * XRotation3x3(pitch) * YRotation3x3(yaw);
 }
-mat2 Rotation2x2(float degrees){
+mat2 Rotation2x2(float angle){
+  angle = DEG2RAD(angle);
   return mat2{
-    cosf(degrees), -sinf(degrees),
-    sin(degrees), cosf(degrees)
+    cosf(angle), sinf(angle),
+    -sinf(angle), cosf(angle)
   };
 }
 

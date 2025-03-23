@@ -57,7 +57,7 @@ vec2 GetMax(const Rectangle2D& rect){
 }
 
 Rectangle2D FromMinMax(const vec2& min, const vec2& max){
-  return Rectangle2D(min, min-max);
+  return Rectangle2D(min, max-min);
 }
 
 bool PointOnLine(const Point2D& point, const Line2D& line){
@@ -221,8 +221,8 @@ bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rect
  float theta = -DEG2RAD(rectangle.rotation);
 
  float zRotation2x2[] = {
-  cosf(theta), -sinf(theta),
-  sinf(theta), cosf(theta)
+  cosf(theta), sinf(theta),
+  -sinf(theta), cosf(theta)
  };
 
  Multiply(r.asArray, vec2(r.x, r.y).asArray, 1, 2, zRotation2x2, 2, 2);
@@ -233,26 +233,25 @@ bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rect
   // vec2 r{rotatedX, rotatedY};
 
   Circle localCircle(r+rectangle.halfExtents, circle.radius);
-  Rectangle2D localRect(Point2D(), rectangle.halfExtents*2.0f);
+  Rectangle2D localRect(Point2D(0,0), rectangle.halfExtents*2.0f);
 
   std::cout << "=========================\n";
 
   std::cout << "r: " << r << "\n";
+  std::cout << "hal extents: " << rectangle.halfExtents << "\n";
 
   std::cout << "verts: " << "\n";
-  std::cout << rectangle.vertices[0] << "\n";
-  std::cout << rectangle.vertices[1] << "\n";
-  std::cout << rectangle.vertices[2] << "\n";
-  std::cout << rectangle.vertices[3] << "\n";
+ 
+  for(int i = 0; i < rectangle.vertices.size(); ++i){
+    std::cout << rectangle.vertices[i] << ",";
+  }
+  std::cout << "\n";
 
   std::cout << "\nlocal circle center: " << localCircle.position << "\n";
   
-  std::cout << "\n";
-  std::cout << "local verts: " << "\n";
-  std::cout << localRect.vertices[0] << "\n";
-  std::cout << localRect.vertices[1] << "\n";
-  std::cout << localRect.vertices[2] << "\n";
-  std::cout << localRect.vertices[3] << "\n";
+  for(int i = 0; i < rectangle.vertices.size(); ++i){
+    std::cout << localRect.vertices[i] << ",";
+  }
   std::cout << "\n";
 
   std::cout << "=========================\n";

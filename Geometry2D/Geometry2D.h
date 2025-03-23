@@ -99,15 +99,23 @@ typedef struct OrientedRectangle: public IShape{
       cosf(rads), sinf(rads),
       -sinf(rads), cosf(rads)
     };
+    mat2 negRotMat {
+      cosf(-rads), sinf(-rads),
+      -sinf(-rads), cosf(-rads)
+    };
+
+    vec2 pos; 
+    Multiply(pos.asArray,position.asArray, 1,2,negRotMat.asArray, 2, 2);
+
 
     vec2 v1;
-    Multiply(v1.asArray,rotMat.asArray, 2, 2, ( position + vec2{-halfExtents.x, halfExtents.y}).asArray, 2,1);
+    Multiply(v1.asArray,( pos + vec2{-halfExtents.x, halfExtents.y}).asArray, 1,2,rotMat.asArray, 2, 2);
     vec2 v2;
-    Multiply(v2.asArray, rotMat.asArray, 2, 2, (position + halfExtents).asArray, 2,1);
+    Multiply(v2.asArray, (pos + halfExtents).asArray, 1,2,rotMat.asArray, 2, 2);
     vec2 v3;
-    Multiply(v3.asArray,rotMat.asArray, 2, 2,( position + vec2{halfExtents.x, -halfExtents.y}).asArray, 2,1);
+    Multiply(v3.asArray, ( pos + vec2{halfExtents.x, -halfExtents.y}).asArray, 1,2,rotMat.asArray, 2, 2);
     vec2 v4;
-    Multiply(v4.asArray, rotMat.asArray, 2, 2, (position - halfExtents).asArray, 2,1);
+    Multiply(v4.asArray, (pos - halfExtents).asArray, 1,2,rotMat.asArray, 2, 2);
 
     vertices = {
       // MultiplyVector(rotMat,( position + vec2{-halfExtents.x, halfExtents.y})),

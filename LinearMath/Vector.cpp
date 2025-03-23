@@ -6,7 +6,7 @@ vec2::vec2(): x{0.0f}, y{0.0f}{};
 vec2::vec2(float _x, float _y): x{_x}, y{_y}{};
 
 std::ostream& operator<<(std::ostream &os, const vec2& v){
-  return os << "vec2(" << v.x << ", "<< v.y << ")";
+  return os << "(" << v.x << ", "<< v.y << ")";
 }
 
 vec2 operator+(const vec2& l, const vec2& r){
