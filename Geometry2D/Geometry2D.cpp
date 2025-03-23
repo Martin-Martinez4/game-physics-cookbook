@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cfloat>
 #include <iostream>
+#include <ostream>
 
 std::vector<vec2> IShape::GetAxes(){
   std::vector<vec2> axes;
@@ -208,10 +209,10 @@ bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle){
 //   std::cout << "circle.position: " <<  circle.position << "\n";
 
 //    std::cout << "verts: " << "\n";
-//   std::cout << rectangle.vertices[0] << "\n";
-//   std::cout << rectangle.vertices[1] << "\n";
-//   std::cout << rectangle.vertices[2] << "\n";
-//   std::cout << rectangle.vertices[3] << "\n";
+//   for(int i = 0; i < rectangle.vertices.size(); ++i){
+//     std::cout << rectangle.vertices[i] << ",";
+//   }
+//   std::cout << std::endl;
 // std::cout << "==============\n";
   return LengthSq(line) <= (circle.radius*circle.radius);
 }
@@ -235,26 +236,26 @@ bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rect
   Circle localCircle(r+rectangle.halfExtents, circle.radius);
   Rectangle2D localRect(Point2D(0,0), rectangle.halfExtents*2.0f);
 
-  std::cout << "=========================\n";
+  // std::cout << "=========================\n";
 
-  std::cout << "r: " << r << "\n";
-  std::cout << "hal extents: " << rectangle.halfExtents << "\n";
+  // std::cout << "r: " << r << "\n";
+  // std::cout << "hal extents: " << rectangle.halfExtents << "\n";
 
-  std::cout << "verts: " << "\n";
+  // std::cout << "verts: " << "\n";
  
-  for(int i = 0; i < rectangle.vertices.size(); ++i){
-    std::cout << rectangle.vertices[i] << ",";
-  }
-  std::cout << "\n";
+  // for(int i = 0; i < rectangle.vertices.size(); ++i){
+  //   std::cout << rectangle.vertices[i] << ",";
+  // }
+  // std::cout << "\n";
 
-  std::cout << "\nlocal circle center: " << localCircle.position << "\n";
+  // std::cout << "\nlocal circle center: " << localCircle.position << "\n";
   
-  for(int i = 0; i < rectangle.vertices.size(); ++i){
-    std::cout << localRect.vertices[i] << ",";
-  }
-  std::cout << "\n";
+  // for(int i = 0; i < rectangle.vertices.size(); ++i){
+  //   std::cout << localRect.vertices[i] << ",";
+  // }
+  // std::cout << "\n";
 
-  std::cout << "=========================\n";
+  // std::cout << "=========================\n";
 
 
   return CircleRectangle(localCircle, localRect);

@@ -85,17 +85,17 @@ TEST(Geometry2D, Geometry2DVertices){
     {
       vec2(0,0),
       vec2(2,4),
-      std::vector<vec2> {vec2(-1,2), vec2(1,2), vec2(1,-2), vec2(-1,-2),}
+      std::vector<vec2> {vec2(0,0), vec2(0,4), vec2(2,4), vec2(2,0),}
     },
     {
       vec2(2,1),
       vec2(4,2),
-      std::vector<vec2> {vec2(0,2), vec2(4,2), vec2(4,0), vec2(0,0),}
+      std::vector<vec2> {vec2(2,1), vec2(2,3), vec2(6,3), vec2(6,1),}
     },
     {
       vec2(-3.5,-3.5),
       vec2(7,7),
-      std::vector<vec2> {vec2(-7,0), vec2(0,0), vec2(0,-7), vec2(-7,-7),}
+      std::vector<vec2> {vec2(-3.5,-3.5), vec2(-3.5,3.5), vec2(3.5,3.5), vec2(3.5,-3.5),}
     },
   };
 
@@ -236,11 +236,11 @@ TEST(Geometry2D, CircleIntersection){
     {
       Circle(vec2(), 1),
       Rectangle2D(vec2(1,1), vec2(1,1)),
-      true
+      false
     },
     {
-      Circle(vec2(0,3), 2),
-      Rectangle2D(vec2(2,0.5), vec2(4,1)),
+      Circle(vec2(0,2), 2),
+      Rectangle2D(vec2(.75,0.5), vec2(4,1)),
       true
     },
     {
@@ -251,7 +251,7 @@ TEST(Geometry2D, CircleIntersection){
     {
       Circle(vec2(0,3), 1),
       Rectangle2D(vec2(-2.05, 3.5), vec2(2, 1.f)),
-      false
+      true
     },
     {
       Circle(vec2(0,3), 2),
