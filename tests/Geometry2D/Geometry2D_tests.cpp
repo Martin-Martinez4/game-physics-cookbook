@@ -417,4 +417,142 @@ TEST(Geometry2D, RectangleIntersect){
 Test SATCollision
   - SATCollision; copy and paste other tests
 */
+TEST(Geometry2D, SATRectangle2DRectangle2D){
+  struct rectangleRectangleTest{
+    Rectangle2D c1;
+    Rectangle2D c2;
+    bool want;
+  };
+
+  std::vector<rectangleRectangleTest> rectangleRectangleTests = {
+    {
+      Rectangle2D(vec2(2, 0.5f), vec2(4, 1)),
+      Rectangle2D(vec2(1.5, 0.5f), vec2(1.f, 1.f)),
+      true
+    },
+    {
+      Rectangle2D(vec2(2, 1.5f), vec2(4, 1)),
+      Rectangle2D(vec2(2, -0.5f), vec2(2.f, 1.f)),
+      false
+    },
+    {
+      Rectangle2D(vec2(-4.5, 3.f), vec2(3, 2)),
+      Rectangle2D(vec2(-2.75, 1.75f), vec2(1.5f, 1.5f)),
+      true
+    },
+    
+  };
+
+  for(int i = 0; i < rectangleRectangleTests.size(); ++i){
+    rectangleRectangleTest t = rectangleRectangleTests[i];
+    
+    EXPECT_EQ(SATCollision(t.c1, t.c2), t.want) << i;
+  }
+}
+TEST(Geometry2D, SATCircleRectangle2D){
+  struct circleRectangleTest{
+    Circle c1;
+    Rectangle2D r1;
+    bool want;
+  };
+
+  std::vector<circleRectangleTest> circleRectangleTests = {
+    {
+      Circle(vec2(), 1),
+      Rectangle2D(vec2(1,1), vec2(1,1)),
+      false
+    },
+    {
+      Circle(vec2(0,2), 2),
+      Rectangle2D(vec2(.75,0.5), vec2(4,1)),
+      true
+    },
+    {
+      Circle(vec2(0,3), 2),
+      Rectangle2D(vec2(2,0.5), vec2(4, 0.95f)),
+      false
+    },
+    {
+      Circle(vec2(0,3), 1),
+      Rectangle2D(vec2(-2.05, 3.5), vec2(2, 1.f)),
+      true
+    },
+    {
+      Circle(vec2(0,3), 2),
+      Rectangle2D(vec2(1,1), vec2(1,.5f)),
+      true
+    },
+    {
+      Circle(vec2(0,3), 2),
+      Rectangle2D(vec2(.5f,.75f), vec2(1.f,1.f)),
+      true
+    },
+    {
+      Circle(vec2(0,3), 2),
+      Rectangle2D(vec2(.5f,.75f), vec2(1.f,0.5f)),
+      true
+    },
+    {
+      Circle(vec2(-2,-2.15), 2),
+      Rectangle2D(vec2(0, 1.25f), vec2(2.f,1.f)),
+      false
+    },
+    
+  };
+
+  for(int i = 0; i < circleRectangleTests.size(); ++i){
+    circleRectangleTest t = circleRectangleTests[i];
+    
+    EXPECT_EQ(SATCollision(t.c1, t.r1), t.want) << i;
+  }
+
+}
+
+TEST(Geometry2D, SATCircleCircle){
+  struct circleCircleTest{
+    Circle c1;
+    Circle c2;
+    bool want;
+  };
+
+  std::vector<circleCircleTest> circleCircleTests = {
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(1,1), 1),
+      true
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(2,2), 1),
+      true
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(1,1.5), 1),
+      true
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(2,3), 1),
+      false
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(3,1), 1),
+      false
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(3,1), 1.5),
+      true
+    },
+
+  };
+
+  for(int i = 0; i < circleCircleTests.size(); ++i){
+    circleCircleTest t = circleCircleTests[i];
+    
+    EXPECT_EQ(SATCollision(t.c1, t.c2), t.want);
+  }
+}
 

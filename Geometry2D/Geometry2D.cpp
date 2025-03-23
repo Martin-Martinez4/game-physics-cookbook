@@ -181,20 +181,9 @@ bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle){
   
   Point2D closestPoint = circle.position;
 
-  // CLAMP(closestPoint.x, min.x, max.x);
-  // CLAMP(closestPoint.y, min.y, max.y);
+  CLAMP(closestPoint.x, min.x, max.x);
+  CLAMP(closestPoint.y, min.y, max.y);
 
-  if(closestPoint.x < min.x){
-    closestPoint.x = min.x;
-  }else if(closestPoint.x > max.x){
-    closestPoint.x = max.x;
-  }
-
-  if(closestPoint.y < min.y){
-    closestPoint.y = min.y;
-  }else if(closestPoint.y > max.y){
-    closestPoint.y = max.y;
-  }
   Line2D line(circle.position, closestPoint);
 
 // std::cout << "==============\n";
@@ -450,10 +439,10 @@ bool SATCollision(IShape& shape1, IShape& shape2){
     // one is a circle
     if(axes1.size() == 1){
       // There is only one axis for a circle the center point - the other center point.  
-      axes1 = {shape1.GetCentroid() - shape2.GetCentroid()};
+      axes1 = {Normalized(shape1.GetCentroid() - shape2.GetCentroid())};
     }
     if(axes2.size() == 1){
-      axes2 = {shape2.GetCentroid() - shape1.GetCentroid()};
+      axes2 = {Normalized(shape2.GetCentroid() - shape1.GetCentroid())};
     }
   }
 
