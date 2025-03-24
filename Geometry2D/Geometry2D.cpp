@@ -17,7 +17,7 @@ std::vector<vec2> IShape::GetAxes(){
     vec2 edge = p1 - p2;
 
     // switch the x and y and negate one to get the perpendicular 
-    axes.push_back(vec2{-edge.y, edge.x});
+    axes.push_back(Normalized(vec2{-edge.y, edge.x}));
   }
 
   return axes;
@@ -414,8 +414,8 @@ bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, con
 
   vec2 r = rectangle2.position - rectangle1.position;
 
-  OrientedRectangle local2(rectangle2.position, rectangle2.halfExtents, rectangle2.rotation);
-  local2.rotation = rectangle2.rotation - rectangle1.rotation;
+  // OrientedRectangle local2(rectangle2.position, rectangle2.halfExtents, rectangle2.rotation);
+  // local2.rotation = rectangle2.rotation - rectangle1.rotation;
 
   float t = -DEG2RAD(rectangle1.rotation);
   float z[] = {
@@ -424,7 +424,22 @@ bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, con
   };
 
   Multiply(r.asArray, vec2(r.x, r.y).asArray, 1, 2, z, 2, 2);
-  local2.position = r + rectangle1.halfExtents;
+  // local2.position = r + rectangle1.halfExtents;
+
+  OrientedRectangle local2(r + rectangle1.halfExtents, rectangle2.halfExtents, rectangle2.rotation - rectangle1.rotation);
+
+  // "Local  Verts: \n";
+  // std::cout << "r: " <<  r + rectangle1.halfExtents << "\n";
+  // std::cout << "Rectangle 1: \n";
+  // for(int i = 0; i < local1.vertices.size(); ++i){
+  //   std::cout << local1.vertices[i]<<",";
+  // }
+  // std::cout<<"\n";
+  // std::cout << "Rectangle 2: \n";
+  // for(int i = 0; i < local2.vertices.size(); ++i){
+  //   std::cout << local2.vertices[i]<<",";
+  // }
+  // std::cout<<"\n\n";
 
   return RectangleOrientedRectangle(local1, local2);
 }
@@ -439,9 +454,11 @@ bool SATCollision(IShape& shape1, IShape& shape2){
     // one is a circle
     if(axes1.size() == 1){
       // There is only one axis for a circle the center point - the other center point.  
+      // axes1 = {Normalized(shape1.GetCentroid() - shape2.GetCentroid())};
       axes1 = {Normalized(shape1.GetCentroid() - shape2.GetCentroid())};
     }
     if(axes2.size() == 1){
+      // axes2 = {Normalized(shape2.GetCentroid() - shape1.GetCentroid())};
       axes2 = {Normalized(shape2.GetCentroid() - shape1.GetCentroid())};
     }
   }

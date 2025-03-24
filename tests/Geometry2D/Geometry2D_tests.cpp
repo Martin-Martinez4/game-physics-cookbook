@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "Geometry2D.h"
+#include <iostream>
 #include <vector>
 
 // Tests
@@ -379,7 +380,7 @@ Test Rectangle Intersection
   - RectangleOrientedRectangle
   - OrientedRectangleOrientedRectangle
 */
-TEST(Geometry2D, RectangleIntersect){
+TEST(Geometry2D, RectangleRectangleIntersect){
   struct rectangleRectangleTest{
     Rectangle2D c1;
     Rectangle2D c2;
@@ -412,43 +413,175 @@ TEST(Geometry2D, RectangleIntersect){
   }
 }
 
+  // Rectangle OrientedRectangle
+  TEST(Geometry2D, RectangleOrientedRectangleIntersect){
+    struct rectangleRectangleTest{
+      Rectangle2D r1;
+      OrientedRectangle r2;
+      bool want;
+    };
+  
+    std::vector<rectangleRectangleTest> rectangleRectangleTests = {
+      {
+        Rectangle2D(vec2(2, 0.5f), vec2(4, 1)),
+        OrientedRectangle(vec2(1.5, 0.5f), vec2(1.f, 1.f),0),
+        true
+      },
+      {
+        Rectangle2D(vec2(2, 1.5f), vec2(4, 1)),
+        OrientedRectangle(vec2(2, -0.5f), vec2(2.f, 1.f),0),
+        false
+      },
+      {
+        Rectangle2D(vec2(-4.5, 3.f), vec2(3, 2)),
+        OrientedRectangle(vec2(-2.75, 1.75f), vec2(1.5f, 1.5f),0),
+        true
+      },
+      
+    };
+  
+    for(int i = 0; i < rectangleRectangleTests.size(); ++i){
+      rectangleRectangleTest t = rectangleRectangleTests[i];
+      
+      EXPECT_EQ(RectangleOrientedRectangle(t.r1, t.r2), t.want) << i;
+    }
+  }
+
+  // Oriented Rectangle Oriented Rectangle
+  TEST(Geometry2D, OrientedRectangleOrientedRectangleIntersect){
+    struct rectangleRectangleTest{
+      OrientedRectangle r1;
+      OrientedRectangle r2;
+      bool want;
+    };
+  
+    std::vector<rectangleRectangleTest> rectangleRectangleTests = {
+      {
+        OrientedRectangle(vec2(2, 0.5f), vec2(4, 1), 0),
+        OrientedRectangle(vec2(1.5, 0.5f), vec2(1.f, 1.f),0),
+        true
+      },
+      {
+        OrientedRectangle(vec2(2, 1.5f), vec2(4, 1), 0),
+        OrientedRectangle(vec2(2, -0.5f), vec2(2.f, 1.f),0),
+        true
+      },
+      {
+        OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 0),
+        OrientedRectangle(vec2(-2.75, 1.75f), vec2(1.5f, 1.5f),0),
+        true
+      },
+      {
+        // barely miss; may have to zoom in to see
+        OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 0),
+        OrientedRectangle(vec2(-2.75, -1.05f), vec2(1.5f, 1.5f),30),
+        false
+      },
+      {
+        // barely miss; may have to zoom in to see
+        OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 0),
+        OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),30),
+        true
+      },
+      {
+        // barely miss; may have to zoom in to see
+        OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 30),
+        OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),0),
+        false
+      },
+      {
+        // barely miss; may have to zoom in to see
+        OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 30),
+        OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),0),
+        true
+      },
+      {
+        // barely miss; may have to zoom in to see
+        OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 30),
+        OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),40),
+        false
+      },
+      {
+        // barely miss; may have to zoom in to see
+        OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 8),
+        OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),40),
+        true
+      },
+      
+    };
+  
+    for(int i = 0; i < rectangleRectangleTests.size(); ++i){
+      rectangleRectangleTest t = rectangleRectangleTests[i];
+
+      // std::cout << "Test " << i<< " Verts: \n";
+      // std::cout << "Rectangle 1: \n";
+      // for(int i = 0; i < t.r1.vertices.size(); ++i){
+      //   std::cout << t.r1.vertices[i]<<",";
+      // }
+      // std::cout<<"\n";
+      // std::cout << "Rectangle 2: \n";
+      // for(int i = 0; i < t.r2.vertices.size(); ++i){
+      //   std::cout << t.r2.vertices[i]<<",";
+      // }
+      // std::cout<<"\n\n";
+      
+      EXPECT_EQ(OrientedRectangleOrientedRectangle(t.r1, t.r2), t.want) << i;
+    }
+  }
+
 
 /* 
 Test SATCollision
   - SATCollision; copy and paste other tests
 */
-TEST(Geometry2D, SATRectangle2DRectangle2D){
-  struct rectangleRectangleTest{
-    Rectangle2D c1;
-    Rectangle2D c2;
+TEST(Geometry2D, SATCircleCircle){
+  struct circleCircleTest{
+    Circle c1;
+    Circle c2;
     bool want;
   };
 
-  std::vector<rectangleRectangleTest> rectangleRectangleTests = {
+  std::vector<circleCircleTest> circleCircleTests = {
     {
-      Rectangle2D(vec2(2, 0.5f), vec2(4, 1)),
-      Rectangle2D(vec2(1.5, 0.5f), vec2(1.f, 1.f)),
+      Circle(vec2(), 2),
+      Circle(vec2(1,1), 1),
       true
     },
     {
-      Rectangle2D(vec2(2, 1.5f), vec2(4, 1)),
-      Rectangle2D(vec2(2, -0.5f), vec2(2.f, 1.f)),
+      Circle(vec2(), 2),
+      Circle(vec2(2,2), 1),
+      true
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(1,1.5), 1),
+      true
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(2,3), 1),
       false
     },
     {
-      Rectangle2D(vec2(-4.5, 3.f), vec2(3, 2)),
-      Rectangle2D(vec2(-2.75, 1.75f), vec2(1.5f, 1.5f)),
+      Circle(vec2(), 2),
+      Circle(vec2(3,1), 1),
+      false
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(3,1), 1.5),
       true
     },
-    
+
   };
 
-  for(int i = 0; i < rectangleRectangleTests.size(); ++i){
-    rectangleRectangleTest t = rectangleRectangleTests[i];
+  for(int i = 0; i < circleCircleTests.size(); ++i){
+    circleCircleTest t = circleCircleTests[i];
     
-    EXPECT_EQ(SATCollision(t.c1, t.c2), t.want) << i;
+    EXPECT_EQ(SATCollision(t.c1, t.c2), t.want);
   }
 }
+
 TEST(Geometry2D, SATCircleRectangle2D){
   struct circleRectangleTest{
     Circle c1;
@@ -507,52 +640,244 @@ TEST(Geometry2D, SATCircleRectangle2D){
   }
 
 }
-
-TEST(Geometry2D, SATCircleCircle){
-  struct circleCircleTest{
+TEST(Geometry2D, SATCircleOrientedRectangle){
+  struct circleOrientedRectangleTest{
     Circle c1;
-    Circle c2;
+    OrientedRectangle r1;
     bool want;
   };
 
-  std::vector<circleCircleTest> circleCircleTests = {
+  std::vector<circleOrientedRectangleTest> circleOrientedRectangleTests = {
     {
-      Circle(vec2(), 2),
-      Circle(vec2(1,1), 1),
+      Circle(vec2(0,0), 1),
+      OrientedRectangle(vec2(1,1), vec2(.5,.5), 0),
       true
     },
     {
-      Circle(vec2(), 2),
-      Circle(vec2(2,2), 1),
+      Circle(vec2(0,3), 2),
+      OrientedRectangle(vec2(2,1), vec2(2,1.f), 0),
       true
     },
     {
-      Circle(vec2(), 2),
-      Circle(vec2(1,1.5), 1),
-      true
-    },
-    {
-      Circle(vec2(), 2),
-      Circle(vec2(2,3), 1),
+      Circle(vec2(0,3), 2),
+      OrientedRectangle(vec2(2,0.5), vec2(2, 0.95f *.5f), 0),
       false
     },
     {
-      Circle(vec2(), 2),
-      Circle(vec2(3,1), 1),
+      Circle(vec2(0,3), 2),
+      OrientedRectangle(vec2(.5f,.5f), vec2(0.5f,0.25f), 0),
       false
     },
     {
-      Circle(vec2(), 2),
-      Circle(vec2(3,1), 1.5),
+      Circle(vec2(0,3), 2),
+      OrientedRectangle(vec2(.5f,.70f), vec2(0.5f,0.25f), 0),
+      false
+    },
+    {
+      Circle(vec2(0,3), 2),
+      OrientedRectangle(vec2(.5f,.75f), vec2(.5f,.5f), 0),
       true
     },
-
+    {
+      Circle(vec2(0,0), 1),
+      OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), 0),
+      true
+    },
+    {
+      Circle(vec2(0,0), 1),
+      OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), 90),
+      true
+    },
+    {
+      Circle(vec2(0,0), 1),
+      OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), 45),
+      true
+    },
+    {
+      Circle(vec2(0,0), 1),
+      OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), -45),
+      true
+    },
+    {
+      Circle(vec2(0,0), 1),
+      OrientedRectangle(vec2(0.0f, 1.5f), vec2(2.f, 0.5f), -30),
+      true
+    },
+    {
+      Circle(vec2(-1,-1), 1),
+      OrientedRectangle(vec2(-.5, 1.5f), vec2(2.f, 0.5f), -30),
+      false
+    },
+    {
+      Circle(vec2(-1,-1), 1),
+      OrientedRectangle(vec2(-.5, -1.5f), vec2(2.f, 0.5f), -30),
+      true
+    },
+    {
+      Circle(vec2(-1,-1), 1),
+      OrientedRectangle(vec2(-.5, -1.5f), vec2(2.25f, 1.f), -30),
+      true
+    },
+    {
+      Circle(vec2(-2,-2.15), 2),
+      OrientedRectangle(vec2(0, 1.25f), vec2(2.f,1.f), 0),
+      false
+    },
   };
 
-  for(int i = 0; i < circleCircleTests.size(); ++i){
-    circleCircleTest t = circleCircleTests[i];
+  for(int i = 0; i < circleOrientedRectangleTests.size(); ++i){
+    circleOrientedRectangleTest t = circleOrientedRectangleTests[i];
+
+    std::cout << "Test " << i<< " Verts: \n";
+    std::cout << "Rectangle 1: \n";
+    for(int i = 0; i < t.r1.vertices.size(); ++i){
+      std::cout << t.r1.vertices[i]<<",";
+    }
+    std::cout<<"\n";
+    std::cout << "Circle: \n";
+    for(int i = 0; i < t.c1.vertices.size(); ++i){
+      std::cout << t.c1.vertices[i]<<",";
+    }
+    std::cout << t.c1.radius<<",";
+    std::cout<<"\n\n";
+
+    EXPECT_EQ(SATCollision(t.c1, t.r1), t.want) << i;
+  }
+
+}
+
+
+TEST(Geometry2D, SATRectangle2DRectangle2D){
+  struct rectangleRectangleTest{
+    Rectangle2D c1;
+    Rectangle2D c2;
+    bool want;
+  };
+
+  std::vector<rectangleRectangleTest> rectangleRectangleTests = {
+    {
+      Rectangle2D(vec2(2, 0.5f), vec2(4, 1)),
+      Rectangle2D(vec2(1.5, 0.5f), vec2(1.f, 1.f)),
+      true
+    },
+    {
+      Rectangle2D(vec2(2, 1.5f), vec2(4, 1)),
+      Rectangle2D(vec2(2, -0.5f), vec2(2.f, 1.f)),
+      false
+    },
+    {
+      Rectangle2D(vec2(-4.5, 3.f), vec2(3, 2)),
+      Rectangle2D(vec2(-2.75, 1.75f), vec2(1.5f, 1.5f)),
+      true
+    },
     
-    EXPECT_EQ(SATCollision(t.c1, t.c2), t.want);
+  };
+
+  for(int i = 0; i < rectangleRectangleTests.size(); ++i){
+    rectangleRectangleTest t = rectangleRectangleTests[i];
+    
+    EXPECT_EQ(SATCollision(t.c1, t.c2), t.want) << i;
+  }
+}
+
+TEST(Geometry2D, SATRectangle2DOrientedRectangle){
+  struct rectangleRectangleTest{
+    Rectangle2D r1;
+    OrientedRectangle r2;
+    bool want;
+  };
+
+  std::vector<rectangleRectangleTest> rectangleRectangleTests = {
+    {
+      Rectangle2D(vec2(2, 0.5f), vec2(4, 1)),
+      OrientedRectangle(vec2(1.5, 0.5f), vec2(1.f, 1.f),0),
+      true
+    },
+    {
+      Rectangle2D(vec2(2, 1.5f), vec2(4, 1)),
+      OrientedRectangle(vec2(2, -0.5f), vec2(2.f, 1.f),0),
+      false
+    },
+    {
+      Rectangle2D(vec2(-4.5, 3.f), vec2(3, 2)),
+      OrientedRectangle(vec2(-2.75, 1.75f), vec2(1.5f, 1.5f),0),
+      true
+    },
+    
+  };
+
+  for(int i = 0; i < rectangleRectangleTests.size(); ++i){
+    rectangleRectangleTest t = rectangleRectangleTests[i];
+    
+    EXPECT_EQ(RectangleOrientedRectangle(t.r1, t.r2), t.want) << i;
+  }
+}
+TEST(Geometry2D, SATOrientedRectangleOrientedRectangle){
+  struct rectangleRectangleTest{
+    OrientedRectangle r1;
+    OrientedRectangle r2;
+    bool want;
+  };
+
+  std::vector<rectangleRectangleTest> rectangleRectangleTests = {
+    {
+      OrientedRectangle(vec2(2, 0.5f), vec2(4, 1), 0),
+      OrientedRectangle(vec2(1.5, 0.5f), vec2(1.f, 1.f),0),
+      true
+    },
+    {
+      OrientedRectangle(vec2(2, 1.5f), vec2(4, 1), 0),
+      OrientedRectangle(vec2(2, -0.5f), vec2(2.f, 1.f),0),
+      true
+    },
+    {
+      OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 0),
+      OrientedRectangle(vec2(-2.75, 1.75f), vec2(1.5f, 1.5f),0),
+      true
+    },
+    {
+      // barely miss; may have to zoom in to see
+      OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 0),
+      OrientedRectangle(vec2(-2.75, -1.05f), vec2(1.5f, 1.5f),30),
+      false
+    },
+    {
+      // barely miss; may have to zoom in to see
+      OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 0),
+      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),30),
+      true
+    },
+    {
+      // barely miss; may have to zoom in to see
+      OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 30),
+      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),0),
+      false
+    },
+    {
+      // barely miss; may have to zoom in to see
+      OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 30),
+      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),0),
+      true
+    },
+    {
+      // barely miss; may have to zoom in to see
+      OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 30),
+      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),40),
+      false
+    },
+    {
+      // barely miss; may have to zoom in to see
+      OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 8),
+      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),40),
+      true
+    },
+    
+  };
+
+  for(int i = 0; i < rectangleRectangleTests.size(); ++i){
+    rectangleRectangleTest t = rectangleRectangleTests[i];
+    
+    EXPECT_EQ(SATCollision(t.r1, t.r2), t.want) << i;
   }
 }
 
