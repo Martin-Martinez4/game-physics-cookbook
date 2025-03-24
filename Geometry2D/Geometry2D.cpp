@@ -25,7 +25,7 @@ std::vector<vec2> IShape::GetAxes(){
 std::vector<vec2> IShape::GetVertices(){
   return vertices;
 };
-vec2 IShape::GetCentroid(){
+vec2 IShape::GetCentroid() const{
   vec2 vecAcc = vec2(0,0);
 
   for(int i = 0; i < vertices.size(); ++i){
@@ -292,12 +292,12 @@ Interval2D GetInterval(const Rectangle2D& rectangle, const vec2& axis){
 Interval2D GetInterval(const IShape& shape, const vec2& axis){
   Interval2D result;
 
-
   result.min = result.max = Dot(axis, shape.vertices[0]);
 
   // handle circles
   if(shape.vertices.size() == 1){
     const Circle& c = static_cast <const Circle&> (shape);
+
     result.min= result.min - c.radius;
     result.max = result.max + c.radius;
     return result;
@@ -485,6 +485,52 @@ bool SATCollision(IShape& shape1, IShape& shape2){
 
   return true;
 }
+
+Circle ContainingCircle(const IShape& shape){
+
+   if(shape.vertices.size() == 1){
+    const Circle& c = static_cast <const Circle&> (shape);
+  
+    return Circle(c.position, c.radius);
+  }else{
+
+    vec2 center = shape.GetCentroid();
+
+    float radius = MagnitudeSq(center - shape.vertices[0]);
+    for(int i = 1; i < shape.vertices.size(); ++i){
+      float distance = MagnitudeSq(center - shape.vertices[i]);
+      if(distance > radius){
+        radius = distance;
+      }
+    }
+
+    return Circle(center, sqrtf(radius));
+
+  }
+}
+
+Rectangle2D ContainingRectangle(const IShape& shape){
+
+  if(shape.vertices.size() == 1){
+    const Circle& c = static_cast <const Circle&> (shape);
+    return Rectangle2D(c.position - vec2(c.radius, c.radius), vec2(c.radius*2, c.radius*2));
+  }
+
+  vec2 min = shape.vertices[0];
+  vec2 max = shape.vertices[0];
+
+  for(int i = 0; i < shape.vertices.size(); ++i){
+    vec2 v = shape.vertices[i];
+    min.x = v.x < min.x ? v.x : min.x;
+    min.y = v.y < min.y ? v.y : min.y;
+
+    max.x = v.x > max.x ? v.x : max.x;
+    max.y = v.y > max.y ? v.y : max.y;
+  }
+
+  return FromMinMax(min, max);
+}
+
 
 
 

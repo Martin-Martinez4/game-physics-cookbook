@@ -13,7 +13,7 @@ public:
   IShape(std::vector<vec2> vertices): vertices{vertices}{}
 
   std::vector<vec2> GetVertices();
-  vec2 GetCentroid();
+  vec2 GetCentroid() const;
   std::vector<vec2> GetAxes();
 
   std::vector<vec2> vertices;
@@ -32,11 +32,12 @@ float Length(const Line2D& line);
 float LengthSq(const Line2D& line);
 
 typedef struct Circle: public IShape{
+  inline Circle(): IShape::IShape(std::vector<vec2>{vec2(0,0)}), radius(1.0f), position(0,0){}
+  inline Circle(const Point2D& position, float radius): IShape::IShape(std::vector<vec2>{position}), position(position), radius(radius){}
+
   Point2D position;
   float radius;
 
-  inline Circle(): IShape::IShape(std::vector<vec2>{vec2(0,0)}), radius(1.0f){}
-  inline Circle(const Point2D& position, float radius): IShape::IShape(std::vector<vec2>{position}), position(position), radius(radius){}
 
 } Circle;
 
@@ -165,4 +166,7 @@ bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, con
 
 bool SATCollision(IShape& shape1, IShape& shape2);
 
+Circle ContainingCircle(const IShape& shape);
+
+Rectangle2D ContainingRectangle(const IShape& shape);
 #endif

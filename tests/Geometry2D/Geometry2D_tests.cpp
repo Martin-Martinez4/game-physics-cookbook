@@ -251,7 +251,7 @@ TEST(Geometry2D, CircleIntersection){
     },
     {
       Circle(vec2(0,3), 1),
-      Rectangle2D(vec2(-2.05, 3.5), vec2(2, 1.f)),
+      Rectangle2D(vec2(-2.05f, 3.5f), vec2(2, 1.f)),
       true
     },
     {
@@ -270,7 +270,7 @@ TEST(Geometry2D, CircleIntersection){
       true
     },
     {
-      Circle(vec2(-2,-2.15), 2),
+      Circle(vec2(-2,-2.15f), 2),
       Rectangle2D(vec2(0, 1.25f), vec2(2.f,1.f)),
       false
     },
@@ -361,7 +361,7 @@ TEST(Geometry2D, CircleIntersection){
       true
     },
     {
-      Circle(vec2(-2,-2.15), 2),
+      Circle(vec2(-2,-2.15f), 2),
       OrientedRectangle(vec2(0, 1.25f), vec2(2.f,1.f), 0),
       false
     },
@@ -606,13 +606,13 @@ TEST(Geometry2D, SATCircleRectangle2D){
       false
     },
     {
-      Circle(vec2(0,3), 1),
-      Rectangle2D(vec2(-2.05, 3.5), vec2(2, 1.f)),
+      Circle(vec2(0.f,3.f), 1.f),
+      Rectangle2D(vec2(-2.05f, 3.5f), vec2(2.f, 1.f)),
       true
     },
     {
-      Circle(vec2(0,3), 2),
-      Rectangle2D(vec2(1,1), vec2(1,.5f)),
+      Circle(vec2(0.f,3.f), 2.f),
+      Rectangle2D(vec2(1.f,1.f), vec2(1.f,.5f)),
       true
     },
     {
@@ -626,7 +626,7 @@ TEST(Geometry2D, SATCircleRectangle2D){
       true
     },
     {
-      Circle(vec2(-2,-2.15), 2),
+      Circle(vec2(-2,-2.15f), 2),
       Rectangle2D(vec2(0, 1.25f), vec2(2.f,1.f)),
       false
     },
@@ -719,7 +719,7 @@ TEST(Geometry2D, SATCircleOrientedRectangle){
       true
     },
     {
-      Circle(vec2(-2,-2.15), 2),
+      Circle(vec2(-2,-2.15f), 2),
       OrientedRectangle(vec2(0, 1.25f), vec2(2.f,1.f), 0),
       false
     },
@@ -728,18 +728,18 @@ TEST(Geometry2D, SATCircleOrientedRectangle){
   for(int i = 0; i < circleOrientedRectangleTests.size(); ++i){
     circleOrientedRectangleTest t = circleOrientedRectangleTests[i];
 
-    std::cout << "Test " << i<< " Verts: \n";
-    std::cout << "Rectangle 1: \n";
-    for(int i = 0; i < t.r1.vertices.size(); ++i){
-      std::cout << t.r1.vertices[i]<<",";
-    }
-    std::cout<<"\n";
-    std::cout << "Circle: \n";
-    for(int i = 0; i < t.c1.vertices.size(); ++i){
-      std::cout << t.c1.vertices[i]<<",";
-    }
-    std::cout << t.c1.radius<<",";
-    std::cout<<"\n\n";
+    // std::cout << "Test " << i<< " Verts: \n";
+    // std::cout << "Rectangle 1: \n";
+    // for(int i = 0; i < t.r1.vertices.size(); ++i){
+    //   std::cout << t.r1.vertices[i]<<",";
+    // }
+    // std::cout<<"\n";
+    // std::cout << "Circle: \n";
+    // for(int i = 0; i < t.c1.vertices.size(); ++i){
+    //   std::cout << t.c1.vertices[i]<<",";
+    // }
+    // std::cout << t.c1.radius<<",";
+    // std::cout<<"\n\n";
 
     EXPECT_EQ(SATCollision(t.c1, t.r1), t.want) << i;
   }
@@ -849,26 +849,26 @@ TEST(Geometry2D, SATOrientedRectangleOrientedRectangle){
     },
     {
       // barely miss; may have to zoom in to see
-      OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 30),
-      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),0),
+      OrientedRectangle(vec2(-4.5f, 3.f), vec2(3.f, 2.f), 30.f),
+      OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 0.f),
       false
     },
     {
       // barely miss; may have to zoom in to see
-      OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 30),
-      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),0),
+      OrientedRectangle(vec2(-3.5f, 3.f), vec2(3.f, 2.f), 30.f),
+      OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 0.f),
       true
     },
     {
       // barely miss; may have to zoom in to see
-      OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 30),
-      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),40),
+      OrientedRectangle(vec2(-3.5f, 3.f), vec2(3.f, 2.f), 30.f),
+      OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 40.f),
       false
     },
     {
       // barely miss; may have to zoom in to see
-      OrientedRectangle(vec2(-3.5, 3.f), vec2(3, 2), 8),
-      OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),40),
+      OrientedRectangle(vec2(-3.5f, 3.f), vec2(3.f, 2.f), 8.f),
+      OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 40.f),
       true
     },
     
@@ -878,6 +878,88 @@ TEST(Geometry2D, SATOrientedRectangleOrientedRectangle){
     rectangleRectangleTest t = rectangleRectangleTests[i];
     
     EXPECT_EQ(SATCollision(t.r1, t.r2), t.want) << i;
+  }
+}
+
+TEST(Geometry2D, ContainingCircle){
+  struct test{
+    const IShape& s;
+    Circle expect;
+  };
+
+  std::vector<test> tests = {
+    {
+      OrientedRectangle(vec2(2.f, 0.5f), vec2(4.f, 1.f), 0.f),
+      Circle(vec2(2.f,0.5f), 4.1231055f)
+    },
+    {
+      OrientedRectangle(vec2(0.f, 0.f), vec2(4.f, 1.f), 30.f),
+      Circle(vec2(0.f,0.f), 4.123106f)
+    },
+    {
+      OrientedRectangle(vec2(0.f, 0.f), vec2(4.f, 1.f), -30.f),
+      Circle(vec2(0.f,0.f), 4.123106f)
+    },
+    {
+      Circle(Point2D(1.f, 1.f), 2.112f),
+      Circle(Point2D(1.f,1.f), 2.112f)
+    },
+    {
+      Rectangle2D(vec2(2,5), vec2(2,2)),
+      Circle(Point2D(3.f,6.f), 1.4142135f)
+    },
+    {
+      Rectangle2D(vec2(2,5), vec2(2,4)),
+      Circle(Point2D(3.f,7.f), 2.236068f)
+    },
+    
+  };
+
+  for(int i = 0; i < tests.size(); ++i){
+    test t = tests[i];
+
+    Circle c = ContainingCircle(t.s);
+
+    EXPECT_FLOAT_EQ(c.radius, t.expect.radius);
+    EXPECT_EQ(c.position, t.expect.position) << "test: " << i << "\n";
+    
+  }
+}
+
+TEST(Geometry2D, ContainingRectangle){
+   struct test{
+    const IShape& s;
+    Rectangle2D expect;
+  };
+
+  std::vector<test> tests = {
+    {
+      Circle(vec2(0,0), 2),
+      Rectangle2D(vec2(-2,-2), vec2(4,4))
+    }
+  };
+
+  for(int i = 0; i < tests.size(); ++i){
+    test t = tests[i];
+
+    Rectangle2D r = ContainingRectangle(t.s);
+
+    for(int i = 0; i < t.expect.vertices.size(); ++i){
+      std::cout << r.vertices[i] << ",";
+    }
+    std::cout << "\n";
+
+    std::cout << "want: \n";
+
+    for(int i = 0; i < t.expect.vertices.size(); ++i){
+      std::cout << t.expect.vertices[i] << ",";
+    }
+      std::cout << "\n";
+
+    for(int i = 0; i < t.expect.vertices.size(); ++i){
+      EXPECT_EQ(t.expect.vertices[i], r.vertices[i]);
+    }
+    
   }
 }
 
