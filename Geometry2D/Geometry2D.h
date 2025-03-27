@@ -132,6 +132,15 @@ typedef struct OrientedRectangle: public IShape{
 
 } OrientedRectangle;
 
+typedef struct BoundingShape{
+
+  BoundingShape(std::vector<IShape> shapes): shapes(shapes){};
+
+  std::vector<IShape> shapes;
+
+
+} BoundingShape;
+
 bool PointOnLine(const Point2D& point, const Line2D& line);
 bool PointInCircle(const Point2D& point, const Circle& circle);
 bool PointInRectangle(const Point2D& point, const Rectangle2D& rectangle);
@@ -159,7 +168,7 @@ Interval2D GetInterval(const OrientedRectangle& rrectangle1, const vec2& axis);
 bool OverlapOnAxis(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2, const vec2& axis);
 bool OverlapOnAxis(const Rectangle2D& rectangle1, const OrientedRectangle& rectangle2, const vec2& axis);
 
-bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2);
+// bool RectangleRectangleSAT(const Rectangle2D& rectangle1, const Rectangle2D& rectangle2);
 bool RectangleOrientedRectangle(const Rectangle2D& rectangle1, const OrientedRectangle& rectangle2);
 
 bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, const OrientedRectangle& rectangle2);

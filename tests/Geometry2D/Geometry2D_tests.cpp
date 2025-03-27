@@ -968,18 +968,6 @@ TEST(Geometry2D, ContainingRectangle){
 
     Rectangle2D r = ContainingRectangle(t.s);
 
-    // for(int i = 0; i < t.s.vertices.size(); ++i){
-    //   std::cout << t.s.vertices[i] << ",";
-    // }
-    // std::cout << "\n";
-
-    // std::cout << "Got: \n";
-
-    // for(int i = 0; i < r.vertices.size(); ++i){
-    //   std::cout << r.vertices[i] << ",";
-    // }
-    //   std::cout << "\n";
-
     for(int i = 0; i < t.expect.vertices.size(); ++i){
       EXPECT_EQ(t.expect.vertices[i], r.vertices[i]);
     }
