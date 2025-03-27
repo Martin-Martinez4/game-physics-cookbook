@@ -936,7 +936,31 @@ TEST(Geometry2D, ContainingRectangle){
     {
       Circle(vec2(0,0), 2),
       Rectangle2D(vec2(-2,-2), vec2(4,4))
-    }
+    },
+    {
+      Circle(vec2(-2,-4), 2),
+      Rectangle2D(vec2(-4,-6), vec2(4,4))
+    },
+    {
+      Circle(vec2(-2,-4), 1.25f),
+      Rectangle2D(vec2(-3.25f,-5.25f), vec2(2.5f, 2.5f))
+    },
+    {
+      Rectangle2D(vec2(0,0), vec2(2,1)),
+      Rectangle2D(vec2(0,0), vec2(2,1))
+    },
+    {
+      Rectangle2D(vec2(10,2), vec2(2,3)),
+      Rectangle2D(vec2(10,2), vec2(2,3))
+    },
+    {
+      OrientedRectangle(vec2(0,0), vec2(2,3), 30),
+      Rectangle2D(vec2(-3.23205f, -3.59808f), vec2(3.23205f*2,3.59808f*2))
+    },
+    {
+      OrientedRectangle(vec2(4,-2), vec2(2,3), -45),
+      Rectangle2D(vec2(0.464466f, -5.53553f), vec2(7.53553f-0.464466f, 1.53553f-(-5.53553f)))
+    },
   };
 
   for(int i = 0; i < tests.size(); ++i){
@@ -944,17 +968,17 @@ TEST(Geometry2D, ContainingRectangle){
 
     Rectangle2D r = ContainingRectangle(t.s);
 
-    for(int i = 0; i < t.expect.vertices.size(); ++i){
-      std::cout << r.vertices[i] << ",";
-    }
-    std::cout << "\n";
+    // for(int i = 0; i < t.s.vertices.size(); ++i){
+    //   std::cout << t.s.vertices[i] << ",";
+    // }
+    // std::cout << "\n";
 
-    std::cout << "want: \n";
+    // std::cout << "Got: \n";
 
-    for(int i = 0; i < t.expect.vertices.size(); ++i){
-      std::cout << t.expect.vertices[i] << ",";
-    }
-      std::cout << "\n";
+    // for(int i = 0; i < r.vertices.size(); ++i){
+    //   std::cout << r.vertices[i] << ",";
+    // }
+    //   std::cout << "\n";
 
     for(int i = 0; i < t.expect.vertices.size(); ++i){
       EXPECT_EQ(t.expect.vertices[i], r.vertices[i]);
