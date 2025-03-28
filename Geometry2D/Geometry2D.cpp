@@ -71,6 +71,7 @@ bool PointOnLine(const Point2D& point, const Line2D& line){
 
 }
 bool PointInCircle(const Point2D& point, const Circle& circle){
+
   Line2D line(point, circle.position);
   if(LengthSq(line) < circle.radius*circle.radius){
     return true;
@@ -100,6 +101,39 @@ bool PointInOrientedRectangle(const Point2D& point, const OrientedRectangle& rec
 
   vec2 localPoint = rotVector + rectangle.halfExtents;
   return PointInRectangle(localPoint, localRectangle);
+}
+
+// 
+bool PointInPolygon(std::vector<vec2> verts, Point2D point){
+  int num_vertices = verts.size();
+    int intersections = 0;
+
+    // For each edge of the polygon
+    for (int i = 0; i < num_vertices; ++i) {
+        // Get the current and next vertices
+        Point2D p1 = verts[i];
+        Point2D p2 = verts[(i + 1) % num_vertices]; // Wrap around to the first vertex
+
+        // Check if the edge is horizontal
+        if (p1.y == p2.y) {
+            continue; // Skip horizontal edges
+        }
+
+        // Check if the ray intersects the edge
+        if ((p1.y < point.y && p2.y >= point.y) || (p2.y < point.y && p1.y >= point.y)) {
+
+            // Calculate the x-coordinate of the intersection point
+            float xIntersect = p1.x + (point.y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+
+            // Check if the intersection point is to the left of the point
+            if (xIntersect < point.x) {
+                intersections++;
+            }
+        }
+    }
+
+    // Return true if the number of intersections is odd
+    return (intersections % 2 != 0);
 }
 
 bool LineCircle(const Line2D& line, const Circle& circle){
@@ -529,6 +563,27 @@ Rectangle2D ContainingRectangle(const IShape& shape){
   }
 
   return FromMinMax(min, max);
+}
+
+bool PointInShape(const BoundingShape& boundingShape, const Point2D& point){
+
+  for(int i = 0; i < boundingShape.shapes.size(); ++i){
+    if(boundingShape.shapes[i].vertices.size() == 1){
+
+       const Circle& c = static_cast <const Circle&> (boundingShape.shapes[i]); 
+
+      if(PointInCircle(point, c)){
+        return true;
+      }
+
+    }else{
+      if(PointInPolygon(boundingShape.shapes[i].vertices, point)){
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 

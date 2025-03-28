@@ -7,6 +7,36 @@
 
 typedef vec2 Point2D;
 
+//  point in any shape 
+/*
+rayEdgeIntersect(rayOrigin, rayDirection, edgePoint1, edgePoint2){
+  edgeVector = (edgePoint1, edgePoint2);
+
+  if(cross(ray, edgeVector).length is 0){
+    means parallel no intersection
+    return false
+  }
+
+  let t = dot(edgePoint1 - rayOrigin, cross(rayDirection, edgeVector)) / dot(rayDirection, cross(edgeVector, rayDirection));
+
+   if (t < 0) {
+        return false; // No intersection
+    }
+
+    // Calculate the intersection point
+    let intersectionPoint = add(rayOrigin, multiply(rayDirection, t));
+
+    // Check if the intersection point is on the edge segment
+    let s = dot(intersectionPoint - edgePoint1, edgeVector) / dot(edgeVector, edgeVector);
+    if (s < 0 || s > 1) {
+        return false; // No intersection
+    }
+
+    return intersectionPoint; // Intersection point
+}
+*/
+
+
 struct IShape{
 public:
   IShape(){}
@@ -19,6 +49,8 @@ public:
   std::vector<vec2> vertices;
 };
 
+
+bool PointInPolygon(std::vector<vec2> verts, Point2D point);
 typedef struct Line2D: public IShape {
   Point2D start;
   Point2D end;
@@ -178,4 +210,10 @@ bool SATCollision(IShape& shape1, IShape& shape2);
 Circle ContainingCircle(const IShape& shape);
 
 Rectangle2D ContainingRectangle(const IShape& shape);
+
+bool PointInShape(const BoundingShape& boundingShape, const Point2D& point);
+
+// boundingShape to shape; SATCollision between all shapes in boundingShape and the singular shape
+// boundShape to boundingShape; SATCollision between all shapes in one then all shapes in the other.  
+
 #endif

@@ -161,12 +161,261 @@ TEST(Geometry2D, Geometry2DVertices){
 
 /*
 Test Point on/in
-  - PointOnLine
   - PointInCircle
+  - PointOnLine
   - PointInRectangle
   - PointInOrientedRectangle
 */
+TEST(Geometry2D, PointInCircle){
+   struct test{
+    const Point2D& p;
+    const Circle& c;
+    bool want;
+  };
 
+  std::vector<test> tests = {
+    {
+      Point2D(0.f,0.f),
+      Circle(vec2(0,0), 1),
+      true
+    },
+    {
+      Point2D(4, -5),
+      Circle(vec2(3,-4), 1.5f),
+      true
+    },
+    {
+      Point2D(0.4f, 0.19f),
+      Circle(vec2(3,-4), 1.f),
+      false
+    },
+  
+  };
+
+  for(int i = 0; i < tests.size(); ++i){
+    test t = tests[i];
+    
+    EXPECT_EQ(PointInCircle(t.p, t.c), t.want) << "test: " << i;
+  }
+}
+
+TEST(Geometry2D, PointOnLine){
+   struct test{
+    const Point2D& p;
+    const Line2D& l;
+    bool want;
+  };
+
+  std::vector<test> tests = {
+    {
+      Point2D(0.1f,0.2f),
+      Line2D(vec2(0,0), vec2(2,4)),
+      true
+    },
+    {
+      Point2D(1.5f,-2.f),
+      Line2D(vec2(3,-4), vec2(0,0)),
+      true
+    },
+    {
+      Point2D(1.5f,-2.05f),
+      Line2D(vec2(3,-4), vec2(0,0)),
+      false
+    },
+  
+  };
+
+  for(int i = 0; i < tests.size(); ++i){
+    test t = tests[i];
+    
+    EXPECT_EQ(PointOnLine(t.p, t.l), t.want) << "test: " << i;
+  }
+}
+
+TEST(Geometry2D, PointInRectangle){
+   struct test{
+    const Point2D& p;
+    const Rectangle2D& r;
+    bool want;
+  };
+
+  std::vector<test> tests = {
+    {
+      Point2D(0.5f, 1.f),
+      Rectangle2D(Point2D(0,0), vec2(1,2)),
+      true
+    },
+    {
+      Point2D(0.005f, 1.f),
+      Rectangle2D(Point2D(0,0), vec2(1,2)),
+      true
+    },
+    {
+      Point2D(5.f,-1.5f),
+      Rectangle2D(vec2(3,-4), vec2(2,3)),
+      true
+    },
+    {
+      Point2D(5.01f,-1.5f),
+      Rectangle2D(vec2(3,-4), vec2(2,3)),
+      false
+    },
+  
+  };
+
+  for(int i = 0; i < tests.size(); ++i){
+    test t = tests[i];
+    
+    EXPECT_EQ(PointInRectangle(t.p, t.r), t.want) << "test: " << i;
+  }
+}
+
+TEST(Geometry2D, PointInOrientedRectangle){
+   struct test{
+    const Point2D& p;
+    const OrientedRectangle& r;
+    bool want;
+  };
+
+  std::vector<test> tests = {
+    {
+      Point2D(0.5f, 1.f),
+      OrientedRectangle(Point2D(0,0), vec2(1,2), 0),
+      true
+    },
+    {
+      Point2D(0.005f, 1.f),
+      OrientedRectangle(Point2D(0,0), vec2(1,2), 0),
+      true
+    },
+    {
+      Point2D(5.f,-1.5f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), 0),
+      true
+    },
+    {
+      Point2D(5.01f,-1.5f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), 0),
+      false
+    },
+    {
+      Point2D(0.5f, 1.f),
+      OrientedRectangle(Point2D(0,0), vec2(1,2), 30),
+      true
+    },
+    {
+      Point2D(0.005f, 1.f),
+      OrientedRectangle(Point2D(0,0), vec2(1,2), 45),
+      true
+    },
+    {
+      Point2D(5.0f,-1.69f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), -30),
+      false
+    },
+    {
+      Point2D(5.0f,-1.692f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), -30),
+      true
+    },
+    {
+      Point2D(5.01f,-1.5f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), 45),
+      false
+    },
+  
+  };
+
+  for(int i = 0; i < tests.size(); ++i){
+    test t = tests[i];
+    
+    EXPECT_EQ(PointInOrientedRectangle(t.p, t.r), t.want) << "test: " << i;
+  }
+}
+
+TEST(Geometry2D, PointInPolygon){
+   struct test{
+    const Point2D& p;
+    const IShape& s;
+    bool want;
+  };
+
+  std::vector<test> tests = {
+    {
+      Point2D(0.5f, 1.f),
+      Rectangle2D(Point2D(0,0), vec2(1,2)),
+      true
+    },
+    {
+      Point2D(0.005f, 1.f),
+      Rectangle2D(Point2D(0,0), vec2(1,2)),
+      true
+    },
+    {
+      Point2D(5.f,-1.5f),
+      Rectangle2D(vec2(3,-4), vec2(2,3)),
+      true
+    },
+    {
+      Point2D(5.01f,-1.5f),
+      Rectangle2D(vec2(3,-4), vec2(2,3)),
+      false
+    },
+       {
+      Point2D(0.5f, 1.f),
+      OrientedRectangle(Point2D(0,0), vec2(1,2), 0),
+      true
+    },
+    {
+      Point2D(0.005f, 1.f),
+      OrientedRectangle(Point2D(0,0), vec2(1,2), 0),
+      true
+    },
+    {
+      Point2D(5.f,-1.5f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), 0),
+      true
+    },
+    {
+      Point2D(5.01f,-1.5f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), 0),
+      false
+    },
+    {
+      Point2D(0.5f, 1.f),
+      OrientedRectangle(Point2D(0,0), vec2(1,2), 30),
+      true
+    },
+    {
+      Point2D(0.005f, 1.f),
+      OrientedRectangle(Point2D(0,0), vec2(1,2), 45),
+      true
+    },
+    {
+      Point2D(5.0f,-1.69f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), -30),
+      false
+    },
+    {
+      Point2D(5.0f,-1.692f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), -30),
+      true
+    },
+    {
+      Point2D(5.01f,-1.5f),
+      OrientedRectangle(vec2(3,-4), vec2(2,3), 45),
+      false
+    },
+  
+  
+  };
+
+  for(int i = 0; i < tests.size(); ++i){
+    test t = tests[i];
+    
+    EXPECT_EQ(PointInPolygon(t.s.vertices, t.p), t.want) << "test: " << i;
+  }
+}
 /*
 Test Line Intersection
   - LineCircle
