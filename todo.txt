@@ -1,0 +1,9 @@
+- Add MVT Tests
+- Add test to see if shape are considered collided if one contains the other.  
+- Create a polygon inside polygon function
+  - If no edges intersect and one vertex is inside the other shape then it is contained.  
+  - Check edges against edges once, then do a check for a vertex in each shape. 
+- Implement contact manifold using clipping 
+- Implement Collision force resolution
+- May need to add an object class that has a IShape and other properties
+  - Will need to make BoundingShape herit from IShape

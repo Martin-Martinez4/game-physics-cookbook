@@ -827,7 +827,7 @@ TEST(Geometry2D, SATCircleCircle){
   for(int i = 0; i < circleCircleTests.size(); ++i){
     circleCircleTest t = circleCircleTests[i];
     
-    EXPECT_EQ(SATCollision(t.c1, t.c2), t.want);
+    EXPECT_EQ(SATCollision(t.c1, t.c2).collided, t.want);
   }
 }
 
@@ -885,7 +885,7 @@ TEST(Geometry2D, SATCircleRectangle2D){
   for(int i = 0; i < circleRectangleTests.size(); ++i){
     circleRectangleTest t = circleRectangleTests[i];
     
-    EXPECT_EQ(SATCollision(t.c1, t.r1), t.want) << i;
+    EXPECT_EQ(SATCollision(t.c1, t.r1).collided, t.want) << i;
   }
 
 }
@@ -990,7 +990,7 @@ TEST(Geometry2D, SATCircleOrientedRectangle){
     // std::cout << t.c1.radius<<",";
     // std::cout<<"\n\n";
 
-    EXPECT_EQ(SATCollision(t.c1, t.r1), t.want) << i;
+    EXPECT_EQ(SATCollision(t.c1, t.r1).collided, t.want) << i;
   }
 
 }
@@ -1025,7 +1025,7 @@ TEST(Geometry2D, SATRectangle2DRectangle2D){
   for(int i = 0; i < rectangleRectangleTests.size(); ++i){
     rectangleRectangleTest t = rectangleRectangleTests[i];
     
-    EXPECT_EQ(SATCollision(t.c1, t.c2), t.want) << i;
+    EXPECT_EQ(SATCollision(t.c1, t.c2).collided, t.want) << i;
   }
 }
 
@@ -1126,7 +1126,7 @@ TEST(Geometry2D, SATOrientedRectangleOrientedRectangle){
   for(int i = 0; i < rectangleRectangleTests.size(); ++i){
     rectangleRectangleTest t = rectangleRectangleTests[i];
     
-    EXPECT_EQ(SATCollision(t.r1, t.r2), t.want) << i;
+    EXPECT_EQ(SATCollision(t.r1, t.r2).collided, t.want) << i;
   }
 }
 

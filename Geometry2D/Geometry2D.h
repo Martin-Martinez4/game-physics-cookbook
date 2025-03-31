@@ -173,6 +173,14 @@ typedef struct BoundingShape{
 
 } BoundingShape;
 
+typedef struct CollisionData{
+  CollisionData(bool collided, float depth, vec2 axis):collided{collided}, depth{depth}, axis{axis}{};
+
+  bool collided;
+  float depth;
+  vec2 axis;
+};
+
 bool PointOnLine(const Point2D& point, const Line2D& line);
 bool PointInCircle(const Point2D& point, const Circle& circle);
 bool PointInRectangle(const Point2D& point, const Rectangle2D& rectangle);
@@ -205,7 +213,7 @@ bool RectangleOrientedRectangle(const Rectangle2D& rectangle1, const OrientedRec
 
 bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, const OrientedRectangle& rectangle2);
 
-bool SATCollision(IShape& shape1, IShape& shape2);
+CollisionData SATCollision(IShape& shape1, IShape& shape2);
 
 Circle ContainingCircle(const IShape& shape);
 

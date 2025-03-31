@@ -480,9 +480,12 @@ bool OrientedRectangleOrientedRectangle(const OrientedRectangle& rectangle1, con
 
 
 // not tested might or might not work
-bool SATCollision(IShape& shape1, IShape& shape2){
+CollisionData SATCollision(IShape& shape1, IShape& shape2){
   std::vector<vec2> axes1 = shape1.GetAxes();
   std::vector<vec2> axes2 = shape2.GetAxes();
+
+  float smallestPen = std::numeric_limits<float>::max();
+  vec2 smallestAxis;
 
   if(axes1.size() == 1 || axes2.size() == 1){
     // one is a circle
@@ -503,7 +506,17 @@ bool SATCollision(IShape& shape1, IShape& shape2){
 
     // ((p2.min <= p1.max) && (p1.min <= p2.max)) looks for overlap
     if(!((p2.min <= p1.max) && (p1.min <= p2.max))){
-      return false;
+      return CollisionData(false, smallestPen, smallestAxis);;
+    }else{
+      // min pen
+      // minf(fabs(p1.min - p2.max), fabs(p1.max - p2.min))
+      float tempMin = fminf(fabs(p1.min - p2.max), fabs(p1.max - p2.min));
+
+      if(tempMin < smallestPen){
+        smallestPen = tempMin;
+        smallestAxis = axes1[i];
+      }
+
     }
   }
 
@@ -513,11 +526,22 @@ bool SATCollision(IShape& shape1, IShape& shape2){
 
     // ((p2.min <= p1.max) && (p1.min <= p2.max)) looks for overlap
     if(!((p2.min <= p1.max) && (p1.min <= p2.max))){
-      return false;
+      return CollisionData(false, smallestPen, smallestAxis);;
+    }else{
+      // min pen
+      // minf(fabs(p1.min - p2.max), fabs(p1.max - p2.min))
+      float tempMin = fminf(fabs(p1.min - p2.max), fabs(p1.max - p2.min));
+
+      if(tempMin < smallestPen){
+        smallestPen = tempMin;
+        smallestAxis = axes2[i];
+      }
+
     }
   }
 
-  return true;
+  return CollisionData(true, smallestPen, smallestAxis);
+
 }
 
 Circle ContainingCircle(const IShape& shape){
