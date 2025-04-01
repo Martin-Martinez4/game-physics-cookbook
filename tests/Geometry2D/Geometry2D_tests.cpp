@@ -335,8 +335,8 @@ TEST(Geometry2D, PointInOrientedRectangle){
 
 TEST(Geometry2D, PointInPolygon){
    struct test{
-    const Point2D& p;
-    const IShape& s;
+    const Point2D p;
+    const IShape s;
     bool want;
   };
 
@@ -465,6 +465,16 @@ TEST(Geometry2D, CircleIntersection){
     {
       Circle(vec2(), 2),
       Circle(vec2(3,1), 1.5),
+      true
+    },
+    {
+      Circle(vec2(), 2),
+      Circle(vec2(), 1.5),
+      true
+    },
+    {
+      Circle(vec2(), 1.5),
+      Circle(vec2(), 2),
       true
     },
 
@@ -614,6 +624,7 @@ TEST(Geometry2D, CircleIntersection){
       OrientedRectangle(vec2(0, 1.25f), vec2(2.f,1.f), 0),
       false
     },
+    
   };
 
   for(int i = 0; i < circleOrientedRectangleTests.size(); ++i){
@@ -821,6 +832,26 @@ TEST(Geometry2D, SATCircleCircle){
       Circle(vec2(3,1), 1.5),
       true
     },
+    {
+      Circle(vec2(2.f, .1f), 2),
+      Circle(vec2(2.f, .1f), 1.5),
+      true
+    },
+    {
+      Circle(vec2(.1f, .1f), 2),
+      Circle(vec2(.1f, .1f), 1.5),
+      true
+    },
+    {
+      Circle(vec2(.01f, .01f), 1.5),
+      Circle(vec2(), 2),
+      true
+    },
+    {
+      Circle(vec2(.25f, .25f), 1.5),
+      Circle(vec2(), 2),
+      true
+    },
 
   };
 
@@ -878,6 +909,11 @@ TEST(Geometry2D, SATCircleRectangle2D){
       Circle(vec2(-2,-2.15f), 2),
       Rectangle2D(vec2(0, 1.25f), vec2(2.f,1.f)),
       false
+    },
+    {
+      Circle(vec2(), 2),
+      Rectangle2D(vec2(-1, -1), vec2(1.f,1.f)),
+      true
     },
     
   };
@@ -1133,32 +1169,39 @@ TEST(Geometry2D, SATOrientedRectangleOrientedRectangle){
 TEST(Geometry2D, ContainingCircle){
   struct test{
     const IShape& s;
-    Circle expect;
+    const Circle& expect;
   };
+
+  auto or1 = OrientedRectangle(vec2(2.f, 0.5f), vec2(4.f, 1.f), 0.f);
+  auto or2 = OrientedRectangle(vec2(0.f, 0.f), vec2(4.f, 1.f), 30.f);
+  auto or3 = OrientedRectangle(vec2(0.f, 0.f), vec2(4.f, 1.f), -30.f);
+  auto c1 = Circle(Point2D(1.f, 1.f), 2.112f);
+  auto r1 = Rectangle2D(vec2(2,5), vec2(2,2));
+  auto r2 = Rectangle2D(vec2(2,5), vec2(2,4));
 
   std::vector<test> tests = {
     {
-      OrientedRectangle(vec2(2.f, 0.5f), vec2(4.f, 1.f), 0.f),
+      or1,
       Circle(vec2(2.f,0.5f), 4.1231055f)
     },
     {
-      OrientedRectangle(vec2(0.f, 0.f), vec2(4.f, 1.f), 30.f),
+      or2,
       Circle(vec2(0.f,0.f), 4.123106f)
     },
     {
-      OrientedRectangle(vec2(0.f, 0.f), vec2(4.f, 1.f), -30.f),
+      or3,
       Circle(vec2(0.f,0.f), 4.123106f)
     },
     {
-      Circle(Point2D(1.f, 1.f), 2.112f),
+      c1,
       Circle(Point2D(1.f,1.f), 2.112f)
     },
     {
-      Rectangle2D(vec2(2,5), vec2(2,2)),
+      r1,
       Circle(Point2D(3.f,6.f), 1.4142135f)
     },
     {
-      Rectangle2D(vec2(2,5), vec2(2,4)),
+      r2,
       Circle(Point2D(3.f,7.f), 2.236068f)
     },
     
@@ -1177,37 +1220,44 @@ TEST(Geometry2D, ContainingCircle){
 
 TEST(Geometry2D, ContainingRectangle){
    struct test{
-    const IShape& s;
+    IShape& s;
     Rectangle2D expect;
   };
+  auto c1 = Circle(vec2(0,0), 2);
+  auto c2 = Circle(vec2(-2,-4), 2);
+  auto c3 = Circle(vec2(-2,-4), 1.25f);
+  auto r1 = Rectangle2D(vec2(0,0), vec2(2,1));
+  auto r2 = Rectangle2D(vec2(10,2), vec2(2,3));
+  auto or1 = OrientedRectangle(vec2(0,0), vec2(2,3), 30);
+  auto or2 = OrientedRectangle(vec2(4,-2), vec2(2,3), -45);
 
   std::vector<test> tests = {
     {
-      Circle(vec2(0,0), 2),
+      c1,
       Rectangle2D(vec2(-2,-2), vec2(4,4))
     },
     {
-      Circle(vec2(-2,-4), 2),
+      c2,
       Rectangle2D(vec2(-4,-6), vec2(4,4))
     },
     {
-      Circle(vec2(-2,-4), 1.25f),
+      c3,
       Rectangle2D(vec2(-3.25f,-5.25f), vec2(2.5f, 2.5f))
     },
     {
-      Rectangle2D(vec2(0,0), vec2(2,1)),
+      r1,
       Rectangle2D(vec2(0,0), vec2(2,1))
     },
     {
-      Rectangle2D(vec2(10,2), vec2(2,3)),
+      r2,
       Rectangle2D(vec2(10,2), vec2(2,3))
     },
     {
-      OrientedRectangle(vec2(0,0), vec2(2,3), 30),
+      or1,
       Rectangle2D(vec2(-3.23205f, -3.59808f), vec2(3.23205f*2,3.59808f*2))
     },
     {
-      OrientedRectangle(vec2(4,-2), vec2(2,3), -45),
+      or2,
       Rectangle2D(vec2(0.464466f, -5.53553f), vec2(7.53553f-0.464466f, 1.53553f-(-5.53553f)))
     },
   };
@@ -1217,8 +1267,8 @@ TEST(Geometry2D, ContainingRectangle){
 
     Rectangle2D r = ContainingRectangle(t.s);
 
-    for(int i = 0; i < t.expect.vertices.size(); ++i){
-      EXPECT_EQ(t.expect.vertices[i], r.vertices[i]);
+    for(int j = 0; j < t.expect.vertices.size(); ++j){
+      EXPECT_EQ(t.expect.vertices[j], r.vertices[j]) << "Test: " << i;
     }
     
   }

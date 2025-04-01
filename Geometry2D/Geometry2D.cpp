@@ -1,6 +1,7 @@
 #include "Geometry2D.h"
 #include "Matrix.h"
 #include "Vector.h"
+#include <algorithm>
 #include <climits>
 #include <cmath>
 #include <cfloat>
@@ -497,6 +498,7 @@ CollisionData SATCollision(IShape& shape1, IShape& shape2){
     if(axes2.size() == 1){
       // axes2 = {Normalized(shape2.GetCentroid() - shape1.GetCentroid())};
       axes2 = {Normalized(shape2.GetCentroid() - shape1.GetCentroid())};
+
     }
   }
 
@@ -567,10 +569,10 @@ Circle ContainingCircle(const IShape& shape){
   }
 }
 
-Rectangle2D ContainingRectangle(const IShape& shape){
+Rectangle2D ContainingRectangle( IShape& shape){
 
   if(shape.vertices.size() == 1){
-    const Circle& c = static_cast <const Circle&> (shape);
+     Circle& c = static_cast < Circle&> (shape);
     return Rectangle2D(c.position - vec2(c.radius, c.radius), vec2(c.radius*2, c.radius*2));
   }
 
@@ -586,7 +588,7 @@ Rectangle2D ContainingRectangle(const IShape& shape){
     max.y = v.y > max.y ? v.y : max.y;
   }
 
-  return FromMinMax(min, max);
+  return Rectangle2D(min, max-min);
 }
 
 bool PointInShape(const BoundingShape& boundingShape, const Point2D& point){

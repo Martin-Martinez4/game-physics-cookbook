@@ -179,7 +179,7 @@ typedef struct CollisionData{
   bool collided;
   float depth;
   vec2 axis;
-};
+}CollisionData;
 
 bool PointOnLine(const Point2D& point, const Line2D& line);
 bool PointInCircle(const Point2D& point, const Circle& circle);
@@ -217,7 +217,7 @@ CollisionData SATCollision(IShape& shape1, IShape& shape2);
 
 Circle ContainingCircle(const IShape& shape);
 
-Rectangle2D ContainingRectangle(const IShape& shape);
+Rectangle2D ContainingRectangle( IShape& shape);
 
 bool PointInShape(const BoundingShape& boundingShape, const Point2D& point);
 

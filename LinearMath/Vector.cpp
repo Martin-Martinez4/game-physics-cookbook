@@ -44,6 +44,9 @@ void Normalize(vec2& v){
   v = v * (1.0f / Magnitude(v));
 }
 vec2 Normalized(const vec2& v){
+  if(v == vec2()){
+    return vec2(0,0);
+  }
   return  v * (1.0f / Magnitude(v));
 }
 float Angle(const vec2& l, const vec2& r){
