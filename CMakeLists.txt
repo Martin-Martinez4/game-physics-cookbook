@@ -9,6 +9,7 @@ set(sources ${sources}
   ${CMAKE_CURRENT_SOURCE_DIR}/LinearMath/Vector.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/LinearMath/Matrix.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/Geometry2D/Geometry2D.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/QuadTree/QuadTree.cpp
 )
 
 add_executable(
@@ -24,6 +25,7 @@ include_directories(
   PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/LinearMath
   ${CMAKE_CURRENT_SOURCE_DIR}/Geometry2D
+  ${CMAKE_CURRENT_SOURCE_DIR}/QuadTree
 )
 
 # Tests

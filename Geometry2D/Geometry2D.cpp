@@ -512,7 +512,10 @@ CollisionData SATCollision(IShape& shape1, IShape& shape2){
     }else{
       // min pen
       // minf(fabs(p1.min - p2.max), fabs(p1.max - p2.min))
-      float tempMin = fminf(fabs(p1.min - p2.max), fabs(p1.max - p2.min));
+      // float tempMin = fminf(fabs(p1.min - p2.max), fabs(p1.max - p2.min));
+      float tempMin = fminf(p1.max, p2.max) - fmaxf(p1.min, p2.min);
+
+      // Handle Containment later
 
       if(tempMin < smallestPen){
         smallestPen = tempMin;
@@ -532,7 +535,8 @@ CollisionData SATCollision(IShape& shape1, IShape& shape2){
     }else{
       // min pen
       // minf(fabs(p1.min - p2.max), fabs(p1.max - p2.min))
-      float tempMin = fminf(fabs(p1.min - p2.max), fabs(p1.max - p2.min));
+      // float tempMin = fminf(fabs(p1.min - p2.max), fabs(p1.max - p2.min));
+      float tempMin = fminf(p1.max, p2.max) - fmaxf(p1.min, p2.min);
 
       if(tempMin < smallestPen){
         smallestPen = tempMin;

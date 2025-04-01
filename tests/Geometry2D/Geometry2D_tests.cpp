@@ -1127,31 +1127,26 @@ TEST(Geometry2D, SATOrientedRectangleOrientedRectangle){
       false
     },
     {
-      // barely miss; may have to zoom in to see
       OrientedRectangle(vec2(-4.5, 3.f), vec2(3, 2), 0),
       OrientedRectangle(vec2(-2.75, -1.0f), vec2(1.5f, 1.5f),30),
       true
     },
     {
-      // barely miss; may have to zoom in to see
       OrientedRectangle(vec2(-4.5f, 3.f), vec2(3.f, 2.f), 30.f),
       OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 0.f),
       false
     },
     {
-      // barely miss; may have to zoom in to see
       OrientedRectangle(vec2(-3.5f, 3.f), vec2(3.f, 2.f), 30.f),
       OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 0.f),
       true
     },
     {
-      // barely miss; may have to zoom in to see
       OrientedRectangle(vec2(-3.5f, 3.f), vec2(3.f, 2.f), 30.f),
       OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 40.f),
       false
     },
     {
-      // barely miss; may have to zoom in to see
       OrientedRectangle(vec2(-3.5f, 3.f), vec2(3.f, 2.f), 8.f),
       OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 40.f),
       true
@@ -1271,6 +1266,67 @@ TEST(Geometry2D, ContainingRectangle){
       EXPECT_EQ(t.expect.vertices[j], r.vertices[j]) << "Test: " << i;
     }
     
+  }
+}
+
+TEST(Geometry2D, SATCollisionMTV){
+
+   struct test{
+    IShape s1;
+    IShape s2;
+    CollisionData want;
+  };
+
+  std::vector<test> tests = {
+    {
+      OrientedRectangle(vec2(2, 0.5f), vec2(4, 1), 0),
+      OrientedRectangle(vec2(1.5, 0.5f), vec2(1.f, 1.f),0),
+      CollisionData{true, 2, vec2(0, -1)}
+    },
+    {
+      OrientedRectangle(vec2(2, 0.5f), vec2(4, 1), 0),
+      OrientedRectangle(vec2(1.5, 0.f), vec2(1.f, 1.f),0),
+      CollisionData{true, 1.5, vec2(0, -1)}
+    },
+    {
+      OrientedRectangle(vec2(2, 0.5f), vec2(4, 1), 0),
+      OrientedRectangle(vec2(0, 0.f), vec2(1.f, 1.f),0),
+      CollisionData{true, 1.5, vec2(0, -1)}
+    },
+    {
+      OrientedRectangle(vec2(-3.5f, 3.f), vec2(3.f, 2.f), 8.f),
+      OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 40.f),
+      CollisionData{true,0.0014990568f, vec2(-0.139173f, 0.990268f)}
+    },
+     {
+      OrientedRectangle(vec2(-3.5f, 3.f), vec2(3.f, 2.f), 30.f),
+      OrientedRectangle(vec2(-2.75f, -1.0f), vec2(1.5f, 1.5f), 0.f),
+      CollisionData{true, 0.20993686f, vec2 (-0.5, 0.866025f)}
+    },
+    
+  };
+
+  for(int i = 0; i < tests.size(); ++i){
+    test t = tests[i];
+
+    CollisionData r = SATCollision(t.s1, t.s2);
+    
+    // std::cout << "Test " << i<< " Verts: \n";
+    // std::cout << "Shape 1: \n";
+    // for(int i = 0; i < t.s1.vertices.size(); ++i){
+    //   std::cout << t.s1.vertices[i]<<",";
+    // }
+    // std::cout<<"\n";
+
+    // std::cout << "Shape 2: \n";
+    // for(int i = 0; i < t.s2.vertices.size(); ++i){
+    //   std::cout << t.s2.vertices[i]<<",";
+    // }
+    // std::cout<<"\n";
+    
+    EXPECT_EQ(r.collided, t.want.collided);
+    EXPECT_FLOAT_EQ(r.depth, t.want.depth);
+    EXPECT_EQ(r.axis, t.want.axis);
   }
 }
 

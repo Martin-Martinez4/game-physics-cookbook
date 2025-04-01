@@ -76,6 +76,7 @@ typedef struct Circle: public IShape{
 typedef struct Rectangle2D: public IShape{
   Point2D origin;
   vec2 size;
+  float area;
 
   inline Rectangle2D(): IShape::IShape(), size(1,1){
      vertices = {
@@ -84,6 +85,8 @@ typedef struct Rectangle2D: public IShape{
       origin + size,
       origin + vec2(size.x, 0),
     };
+
+    area = 1;
   }
   inline Rectangle2D(const Point2D& origin, const vec2& size): IShape::IShape(), origin(origin), size(size){
     vertices = {
@@ -92,6 +95,8 @@ typedef struct Rectangle2D: public IShape{
       origin + size,
       origin + vec2(size.x, 0),
     };
+
+    area = size.x * size.y;
   }
 } Rectangle2D;
 
