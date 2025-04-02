@@ -156,7 +156,7 @@ std::vector<QuadTreeData*> QuadTreeNode::Query(const Rectangle2D& area){
 
   if(IsLeaf()){
     for(int i = 0, size=contents.size(); i < size; ++i){
-      if(RectangleRectangle(contents[i]->bounds.area)){
+      if(RectangleRectangle(contents[i]->bounds, area)){
         result.push_back(contents[i]);
       }
     }
