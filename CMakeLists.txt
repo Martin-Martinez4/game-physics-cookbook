@@ -45,6 +45,7 @@ set(test_sources ${test_sources}
 ${CMAKE_CURRENT_SOURCE_DIR}/tests/LinearMath/Vector_tests.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/tests/LinearMath/Matrix_tests.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/tests/Geometry2D/Geometry2D_tests.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/tests/BVH/BVH_tests.cpp
 )
 
 add_executable(

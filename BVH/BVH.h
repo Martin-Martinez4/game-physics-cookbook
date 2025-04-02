@@ -7,6 +7,10 @@
 
 // Credit: https://github.com/matthias-research/pages/blob/master/tenMinutePhysics/24-morton.html
 
+uint64_t split(uint64_t x, int log_bits);
+
+uint64_t encode(uint64_t x, uint64_t y, uint64_t z, int log_bits);
+
 unsigned short int expandBits(int v);
 float normalizeCoord(float val, int worldSize);
 unsigned short int calculateMortonCode(float x, float y, float z, int worldSize);
