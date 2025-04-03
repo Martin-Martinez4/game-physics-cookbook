@@ -10,7 +10,7 @@ Choose a splitting axis (e.g., longest axis of the AABB).
 Partition objects based on their position relative to the splitting plane/line.
 Create two child nodes and recursively build the BVH for each child.
 */
-void split(BVHNode& parent, int depth = 0, std::vector<IShape> &shapes) {
+void split(BVHNode& parent, int depth, std::vector<IShape> &shapes) {
 
   if(depth >= MAXDEPTH || parent.shapeCount <= 1){
     return;
@@ -48,19 +48,11 @@ void split(BVHNode& parent, int depth = 0, std::vector<IShape> &shapes) {
 
 }
 
-
-
-int getSplitPos(int begin, int end){
-  return floor((begin + end) / 2);
-}
-
-
-
 BVHNode* createTree(std::vector<IShape> boxes, vec2 worldSize){
   // Create parent node with biggest aabb
   // call split
   // return created node
- 
+ return new BVHNode();
 }
 
 void findCollisions(int boxId, IShape box, BVHNode* node, std::vector<IShape> boxes, std::vector<CollisionData> &cd){

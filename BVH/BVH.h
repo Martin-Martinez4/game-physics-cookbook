@@ -8,9 +8,7 @@
 
 const unsigned int MAXDEPTH = 10;
 
-void split(BVHNode& parent, int depth = 0, std::vector<IShape> &shapes);
 
-int getSplitPos(int begin, int end);
 
 class BVHNode{
 public:
@@ -25,6 +23,8 @@ public:
   BVHNode* right = nullptr;
 
 };
+
+void split(BVHNode& parent, int depth, std::vector<IShape> &shapes);
 
 BVHNode* createTree(std::vector<IShape> boxes);
 
