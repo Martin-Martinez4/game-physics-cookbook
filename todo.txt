@@ -2,6 +2,13 @@
   - If no edges intersect and one vertex is inside the other shape then it is contained.  
   - Check edges against edges once, then do a check for a vertex in each shape. 
 - Implement contact manifold using clipping 
-- Implement Collision force resolution
 - May need to add an object class that has a IShape and other properties
   - Will need to make BoundingShape herit from IShape
+
+- Implement Collision force resolution
+- J norm = resolution = (-(1+elasticity)(rel velocity * norm))/(1/massA + 1/massB)
+  - have a body class
+    - has a shape
+    - when position is updated update the vertices also
+    - Implement update, applyForce and Draw functions
+    
